@@ -6,9 +6,7 @@ const LoginForm = () => {
     <>
       <div className="bg-slate-300 mx-auto my-52 w-1/4 h-80 flex flex-col items-center justify-center rounded">
         <form className="flex flex-col items-center justify-center ">
-          <label className="mb-2 text-2xl font-semibold text-slate-700">
-            Login
-          </label>
+          <header className="mt-4 format-text mb-2 format-header">Login</header>
           <label className="text-left w-full my-2 text-slate-700">
             Username
           </label>

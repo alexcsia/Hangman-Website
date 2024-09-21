@@ -4,9 +4,9 @@ import Link from "next/link";
 const SignUpForm = () => {
   return (
     <div className="bg-slate-300 mx-auto my-auto w-1/3 h-3/4 flex flex-col items-center justify-center rounded">
-      <label className="mb-12 text-3xl font-semibold text-slate-700">
+      <header className="mb-10 !text-3xl format-header">
         Create an account
-      </label>
+      </header>
       <form className="flex flex-col items-center justify-center mb-10">
         <label className="text-left w-full my-2 text-slate-700">Username</label>
         <input

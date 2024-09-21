@@ -28,6 +28,10 @@ main {
   @apply block font-semibold py-2 text-center bg-blue-400 text-white rounded hover:bg-teal-600;
 }
 
+.format-header {
+  @apply text-2xl font-semibold text-slate-700 text-center;
+}
+
 button {
   background-color: rgb(96, 165, 250);
   border-radius: 10px;
