@@ -5,7 +5,9 @@ const HomePageMenu = () => {
   return (
     <>
       <div className="bg-inherit flex items-center justify-center my-17 w-1/3 mx-auto">
-        <header className="format-header !text-4xl ">How's it hanging?</header>
+        <header className="format-header !text-4xl ">
+          How&apos;s it hanging?
+        </header>
       </div>
 
       <div className="flex flex-col space-y-4 mx-auto my-10 w-1/4">

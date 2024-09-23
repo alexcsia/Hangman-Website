@@ -34,7 +34,7 @@ const LoginForm = () => {
           href="/users/signup"
           className="mb-2 text-s underline font-semibold text-slate-700"
         >
-          Don't have an account?
+          Don&apos;t have an account?
         </Link>
       </div>
     </>

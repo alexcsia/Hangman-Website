@@ -1,5 +1,4 @@
 import React from "react";
-import Link from "next/link";
 import LoginForm from "@/app/components/LoginForm";
 
 const LoginPage = () => {
