@@ -6,7 +6,8 @@ export const registerUser = async (req: Request, res: Response) => {
     const userData = req.body;
     const user = await addUser(userData);
     return res.status(201).json(user);
-  } catch (error) {
-    return res.status(500).json({ message: "Error registering user" });
+  } catch (error: any) {
+    console.error("Error registering user:", error.message);
+    return res.status(500).json({ message: error.message });
   }
 };
