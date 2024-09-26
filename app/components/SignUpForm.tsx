@@ -1,15 +1,15 @@
 "use client";
-import React from "react";
 import Link from "next/link";
-import { useState } from "react";
-import { useFormStatus } from "react-dom";
-import { error } from "console";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const SignUpForm: React.FC = () => {
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [isSuccessful, setIsSuccessful] = useState<boolean>(false);
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -25,16 +25,33 @@ const SignUpForm: React.FC = () => {
         const errorData = await response.json();
         setErrorMessage(errorData.message);
         return;
+      } else {
+        setIsSuccessful(true);
+        const data = await response.json();
+        console.log(data);
       }
 
       setUsername("");
       setEmail("");
       setPassword("");
-    } catch (error: any) {
-      console.error("Registration error", error.message);
-      setErrorMessage("An unexpected error occured");
+      setErrorMessage("");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("Registration error", error.message);
+        setErrorMessage(error.message);
+      }
     }
   };
+
+  useEffect(() => {
+    if (isSuccessful) {
+      router.push("/");
+      setUsername("");
+      setEmail("");
+      setPassword("");
+      setErrorMessage("");
+    }
+  }, [isSuccessful, router]);
 
   return (
     <div className="bg-slate-300 mx-1/2 my-1/2  w-1/3 h-3/4 flex flex-col items-center justify-center rounded">
@@ -60,7 +77,7 @@ const SignUpForm: React.FC = () => {
           placeholder="Username"
           className="border border-gray-300 rounded px-1"
           onChange={(e) => setEmail(e.target.value)}
-          maxLength={50}
+          maxLength={254}
           required
         ></input>
         <label className="text-left w-full my-2 text-slate-700">Password</label>
