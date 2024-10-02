@@ -23,8 +23,10 @@ export const authenticateUser = async (req: Request, res: Response) => {
     return res.status(200).json({ token });
   } catch (error: unknown) {
     if (error instanceof Error) {
-      console.error("Error registering user:", error.message);
-      return res.status(500).json({ message: error.message });
+      console.error("Error authenticating user:", error.message);
+      return res.status(500).json({
+        message: "Authentication failed. Please try logging in again",
+      });
     }
   }
 };

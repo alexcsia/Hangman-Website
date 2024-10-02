@@ -34,10 +34,8 @@ export const authenticateJWT = (
       return res.status(403).json({ message: "Invalid token payload" });
     }
   } catch (error: unknown) {
-    if (error instanceof Error) console.log(error);
-    return res
-      .status(403)
-      .json({ message: "Authorization failed. Please try logging in again." });
+    if (error instanceof Error)
+      return res.status(403).json({ message: error.message });
   }
 };
 

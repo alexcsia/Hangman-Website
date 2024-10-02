@@ -15,8 +15,12 @@ export const userProfile = async (
       .json({ message: "You do not have permission to access this profile." });
   }
 
-  const userData = await getUserFromDb(userIdFromParams);
-  console.log("received data:", userData);
-
-  return res.status(200).json(userData);
+  try {
+    const userData = await getUserFromDb(userIdFromParams);
+    console.log("received data:", userData);
+    return res.status(200).json(userData);
+  } catch (error) {
+    console.error("Error when retrieving user data:", error);
+    return res.status(500).json({ message: "Could not retrieve user data" });
+  }
 };
