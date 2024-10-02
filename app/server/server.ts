@@ -1,6 +1,7 @@
 import express from "express";
 import next from "next";
 import authRoutes from "./routes/auth.ts";
+import userRoutes from "./routes/user.ts";
 import connectMongoDB from "./database.ts";
 
 const dev = process.env.NODE_ENV !== "production";
@@ -12,6 +13,7 @@ app
   .then(() => {
     server.use(express.json());
     server.use("/api/auth", authRoutes);
+    server.use("/api/users", userRoutes);
 
     server.all("*", (req, res) => {
       return handle(req, res);
