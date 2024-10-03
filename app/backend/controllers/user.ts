@@ -20,7 +20,7 @@ export const userProfile = async (
     console.log("received data:", userData);
     return res.status(200).json(userData);
   } catch (error) {
-    console.error("Error when retrieving user data:", error);
+    console.error("Error retrieving user data:", error);
     return res.status(500).json({ message: "Could not retrieve user data" });
   }
 };

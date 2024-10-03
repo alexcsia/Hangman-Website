@@ -31,7 +31,11 @@ const LoginForm: React.FC = () => {
         return;
       } else {
         setIsSuccessful(true);
+
         const data = await response.json();
+        const token = data.token;
+        localStorage.setItem("token", token);
+
         console.log(data);
       }
 
