@@ -15,7 +15,7 @@ const SignUpForm: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("/api/auth/register", {
+      const response = await fetch("/api/registration/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, password }),
@@ -23,6 +23,7 @@ const SignUpForm: React.FC = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
+        console.log(errorData);
         setErrorMessage(errorData.message);
         return;
       } else {

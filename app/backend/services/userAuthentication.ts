@@ -2,13 +2,12 @@ import { User } from "../model.ts";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env.JWT_SECRET;
-
-if (!JWT_SECRET) {
-  throw new Error("JWT_SECRET is not defined");
-}
-
 export const loginUser = async (password: string, email: string) => {
+  const JWT_SECRET = process.env.JWT_SECRET;
+
+  if (!JWT_SECRET) {
+    throw new Error("JWT_SECRET is not defined");
+  }
   const user = await User.findOne({ email });
   console.log(user);
 
@@ -18,7 +17,7 @@ export const loginUser = async (password: string, email: string) => {
 
   const passwordMatch = await bcrypt.compare(password, user.password);
   if (!passwordMatch) {
-    console.log("password doesnt match");
+    console.log("password does not match");
 
     throw new Error("Invalid email or password");
   }

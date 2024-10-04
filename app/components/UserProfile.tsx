@@ -33,9 +33,11 @@ const UserProfile = () => {
 
         const data = await res.json();
         setUserData(data);
-      } catch (error: any) {
-        console.error(error);
-        setError(error.message);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.error(error);
+          setError(error.message);
+        }
       } finally {
         setLoading(false);
       }
