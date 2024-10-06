@@ -3,6 +3,7 @@ import next from "next";
 import authRoutes from "./routes/auth.ts";
 import registerRoutes from "./routes/register.ts";
 import userRoutes from "./routes/user.ts";
+import playRoutes from "./routes/play.ts";
 import connectMongoDB from "./database.ts";
 import http from "http";
 
@@ -17,6 +18,7 @@ const startServer = async (): Promise<http.Server> => {
   server.use("/api/auth", authRoutes);
   server.use("/api/registration", registerRoutes);
   server.use("/api/users", userRoutes);
+  server.use("/api/play", playRoutes);
 
   server.all("*", (req, res) => {
     return handle(req, res);
@@ -36,9 +38,5 @@ const startServer = async (): Promise<http.Server> => {
     });
   });
 };
-
-startServer().catch((err) => {
-  console.error("Error starting server:", err);
-});
 
 export { startServer };

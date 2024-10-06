@@ -4,11 +4,11 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "dotenv -e .env.development -- nodemon --exec \"node --loader ts-node/esm\" app/backend/server.ts",
+    "dev": "dotenv -e .env.development -- nodemon --exec \"node --loader ts-node/esm\" app/backend/startServer.ts",
     "build": "next build",
-    "start": "dotenv -e .env.production -- node --loader ts-node/esm app/backend/server.ts",
+    "start": "dotenv -e .env.production -- node --loader ts-node/esm app/backend/startServer.ts",
     "lint": "next lint",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --passWithNoTests"
+    "test": "dotenv -e .env.test -- node --experimental-vm-modules node_modules/jest/bin/jest.js --passWithNoTests"
   },
   "dependencies": {
     "@types/validator": "^13.12.2",
@@ -35,6 +35,7 @@
     "@types/react-dom": "^18",
     "@types/supertest": "^6.0.2",
     "babel-jest": "^29.7.0",
+    "cross-env": "^7.0.3",
     "dotenv-cli": "^7.4.2",
     "eslint": "^8",
     "eslint-config-next": "14.2.12",
