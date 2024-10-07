@@ -1,5 +1,5 @@
-import { User, IUser } from "../model.ts";
-import bcrypt from "bcrypt";
+import { User, IUser } from "../../models/User.ts";
+import bcrypt from "bcryptjs";
 import validator from "validator";
 
 export const addUser = async (userData: IUser) => {

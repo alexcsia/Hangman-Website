@@ -25,10 +25,10 @@ export const authenticateJWT = (
   }
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const verifiedToken = jwt.verify(token, JWT_SECRET);
 
-    if (isJwtPayloadWithUserData(decoded)) {
-      req.user = { id: decoded.id, email: decoded.email };
+    if (isJwtPayloadWithUserData(verifiedToken)) {
+      req.user = { id: verifiedToken.id, email: verifiedToken.email };
       next();
     } else {
       return res.status(403).json({ message: "Invalid token payload" });
@@ -39,14 +39,14 @@ export const authenticateJWT = (
   }
 };
 
-// type guard to ensure decoded token has 'id' and 'email'
+// type guard to ensure the token has 'id' and 'email'
 function isJwtPayloadWithUserData(
-  decoded: unknown
-): decoded is { id: string; email: string } {
+  verifiedToken: unknown
+): verifiedToken is { id: string; email: string } {
   return (
-    typeof decoded === "object" &&
-    decoded != null &&
-    "id" in decoded &&
-    "email" in decoded
+    typeof verifiedToken === "object" &&
+    verifiedToken != null &&
+    "id" in verifiedToken &&
+    "email" in verifiedToken
   );
 }
