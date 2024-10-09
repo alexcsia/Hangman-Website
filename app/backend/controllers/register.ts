@@ -4,6 +4,7 @@ import { addUser } from "../services/userRegistration.ts";
 export const registerUser = async (req: Request, res: Response) => {
   try {
     const userData = req.body;
+    console.log(userData);
     await addUser(userData);
     return res.status(201).json("User registered successfully");
   } catch (error: unknown) {

@@ -1,6 +1,6 @@
 import express from "express";
 import { userProfile } from "../controllers/user.ts";
-import { authenticateJWT } from "../middleware/authenticateJWT.ts";
+import { authenticateJWT } from "../loaders/middleware/authenticateJWT.ts";
 
 const router = express.Router();
 
