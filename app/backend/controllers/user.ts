@@ -9,6 +9,8 @@ export const userProfile = async (
   const userIdFromParams = req.params.userId;
   const userIdFromToken = req.user?.id;
 
+  console.log("received id:", userIdFromToken);
+
   if (userIdFromParams !== userIdFromToken) {
     return res
       .status(403)

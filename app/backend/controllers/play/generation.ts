@@ -1,13 +1,25 @@
 import { Request, Response } from "express";
 import { createLobby } from "../../services/createLobby.ts";
+import { IAuthenticatedRequest } from "../../loaders/middleware/authenticateJWT.ts";
+import mongoose from "mongoose";
 
-export const generateCode = async (req: Request, res: Response) => {
+export const generateCodeAndLobby = async (
+  req: IAuthenticatedRequest,
+  res: Response
+) => {
   try {
-    const lobby = await createLobby();
-    return res.status(200).json({ lobby });
+    const userIdFromToken = req.user?.id;
+    if (!userIdFromToken) {
+      throw new Error("User ID is missing");
+    }
+
+    const userIdObject = new mongoose.Types.ObjectId(userIdFromToken);
+    const lobby = await createLobby(userIdObject);
+
+    return res.status(200).json({ code: lobby.code });
   } catch (error: unknown) {
     if (error instanceof Error) {
-      console.error("Error authenticating user:", error.message);
+      console.log("Error authenticating user:", error.message);
       return res.status(500).json({ message: error.message });
     }
   }

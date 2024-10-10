@@ -18,24 +18,32 @@ export const authenticateJWT = (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.headers.authorization?.split(" ")[1]; // Bearer token
+  const token = req.headers.authorization?.split(" ")[1];
 
   if (!token) {
-    return res.status(401).json({ message: "Access token missing or invalid" });
+    return res.status(401).json({ message: "Please log in to continue" });
   }
 
   try {
     const verifiedToken = jwt.verify(token, JWT_SECRET);
-
-    if (isJwtPayloadWithUserData(verifiedToken)) {
-      req.user = { id: verifiedToken.id, email: verifiedToken.email };
-      next();
-    } else {
-      return res.status(403).json({ message: "Invalid token payload" });
+    if (!isJwtPayloadWithUserData(verifiedToken)) {
+      throw new Error("Invalid token payload");
     }
+
+    req.user = { id: verifiedToken.id, email: verifiedToken.email };
+    next();
   } catch (error: unknown) {
-    if (error instanceof Error)
-      return res.status(403).json({ message: error.message });
+    if (error instanceof jwt.TokenExpiredError) {
+      console.log(error.message);
+      return res
+        .status(401)
+        .json({ message: "Your session expired. Please log in again" });
+    } else if (error instanceof Error) {
+      console.log(error.message);
+      return res
+        .status(403)
+        .json({ message: "Authentication failed. Please log in again" });
+    }
   }
 };
 
