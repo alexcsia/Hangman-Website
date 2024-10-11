@@ -1,17 +1,26 @@
 import request from "supertest";
 import { startServer } from "../../backend/server.ts";
 import http from "http";
-import { User } from "../../models/User.ts";
+import { User } from "../../backend/models/User.ts";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
+import { generateToken } from "../../backend/utils/generateJWT.ts";
+import { Lobby } from "../../backend/models/Lobby.ts";
 
 let server: http.Server;
 
-describe("User authentication and registration API", () => {
+describe("API tests", () => {
   beforeAll(async () => {
     server = await startServer();
   }, 30000);
+
+  afterEach(async () => {
+    await User.deleteOne({
+      username: "testusername",
+      email: "test@example.com",
+    });
+  });
 
   afterAll(async () => {
     await mongoose.disconnect();
@@ -39,11 +48,6 @@ describe("User authentication and registration API", () => {
       expect(createdUser?.email).toBe("test@example.com");
       expect(response.status).toBe(201);
       expect(response.body).toBe("User registered successfully");
-
-      await User.deleteOne({
-        username: "testusername",
-        email: "test@example.com",
-      });
     });
   });
 
@@ -70,12 +74,33 @@ describe("User authentication and registration API", () => {
       expect(token).toMatchObject({ email: "test@example.com" });
       expect(response.status).toBe(200);
     });
+  });
 
-    afterAll(async () => {
-      await User.deleteOne({
+  describe("Lobby creation test", () => {
+    it("should create a new lobby", async () => {
+      const hashedPassword = await bcrypt.hash("123!PASSword", 10);
+      const user = await User.create({
         username: "testusername",
         email: "test@example.com",
+        password: hashedPassword,
       });
+
+      const token = generateToken(user);
+
+      const response = await request(server)
+        .get("/api/play/generate")
+        .set("Authorization", `Bearer ${token}`);
+
+      const receivedCode = response.body.code;
+      console.log(receivedCode);
+
+      const foundLobby = await Lobby.findOne({
+        code: receivedCode,
+        status: "ongoing",
+        players: { $in: [user._id] },
+      });
+      expect(response.status).toBe(200);
+      expect(foundLobby).toBeTruthy;
     });
   });
 });

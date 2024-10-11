@@ -1,13 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { IUser } from "../models/User";
+import { IUser } from "../backend/models/User";
 
 const UserProfile = () => {
   const [userData, setUserData] = useState<IUser | null>(null);
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const { userId } = useParams();
+
   useEffect(() => {
     const token = localStorage.getItem("token");
 

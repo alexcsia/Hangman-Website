@@ -1,4 +1,4 @@
-import { Lobby } from "../../models/Lobby.ts";
+import { Lobby } from "../models/Lobby.ts";
 import mongoose from "mongoose";
 import { nanoid } from "nanoid";
 
