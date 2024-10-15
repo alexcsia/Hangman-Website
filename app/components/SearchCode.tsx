@@ -5,14 +5,26 @@ import { useState } from "react";
 const SearchLobby = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [lobbyCode, setLobbyCode] = useState<string>("");
+  const [token, setToken] = useState<string>("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      setErrorMessage("Please log in first");
+      return;
+    } else {
+      setToken(token);
+    }
 
     try {
       const response = await fetch("/api/play/find", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({ lobbyCode }),
       });
 
