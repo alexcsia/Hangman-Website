@@ -1,4 +1,4 @@
-import { User } from "../models/User.ts";
+import { User } from "../../models/User.ts";
 import mongoose from "mongoose";
 import validator from "validator";
 

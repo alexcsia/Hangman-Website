@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { IUser } from "../backend/models/User";
+import { IUser } from "../backend/modules/models/User";
 
 const UserProfile = () => {
   const [userData, setUserData] = useState<IUser | null>(null);

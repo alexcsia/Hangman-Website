@@ -1,6 +1,7 @@
-import { Lobby } from "../models/Lobby.ts";
+import { Lobby } from "../../models/Lobby.ts";
 import mongoose from "mongoose";
 import { nanoid } from "nanoid";
+import { checkIfUserAlreadyInLobby } from "../utils/checkIfUserInLobby.ts";
 
 export const createLobby = async (userId: mongoose.Types.ObjectId) => {
   const userInOtherLobby = await checkIfUserAlreadyInLobby(userId);
@@ -27,24 +28,4 @@ const generateInviteCode = async () => {
 
   if (!existingCode) return newCode;
   return generateInviteCode();
-};
-
-const checkIfUserAlreadyInLobby = async (userId: mongoose.Types.ObjectId) => {
-  const userInOtherLobby = await Lobby.findOne({
-    status: "ongoing",
-    players: { $in: [userId] },
-  });
-
-  return userInOtherLobby;
-};
-
-const addPlayerToLobby = async (
-  lobbyId: mongoose.Schema.Types.ObjectId,
-  userId: mongoose.Schema.Types.ObjectId
-) => {
-  await Lobby.findByIdAndUpdate(
-    lobbyId,
-    { $push: { players: userId } },
-    { new: true }
-  );
 };

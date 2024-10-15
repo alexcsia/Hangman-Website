@@ -1,4 +1,4 @@
-import { User, IUser } from "../models/User.ts";
+import { User, IUser } from "../../models/User.ts";
 import bcrypt from "bcryptjs";
 import validator from "validator";
 

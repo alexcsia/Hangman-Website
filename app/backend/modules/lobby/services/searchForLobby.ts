@@ -1,4 +1,4 @@
-import { Lobby } from "../models/Lobby.ts";
+import { Lobby } from "../../models/Lobby.ts";
 
 export const searchForLobby = async (code: string) => {
   try {
