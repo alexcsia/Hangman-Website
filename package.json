@@ -4,9 +4,9 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "dotenv -e .env.development -- nodemon --exec \"node --loader ts-node/esm\" app/backend/startServer.ts",
+    "dev": "dotenv -e .env.development -- nodemon --exec \"node --loader ts-node/esm\" backend/startServer.ts",
     "build": "next build",
-    "start": "dotenv -e .env.production -- node --loader ts-node/esm app/backend/startServer.ts",
+    "start": "dotenv -e .env.production -- node --loader ts-node/esm backend/startServer.ts",
     "lint": "next lint",
     "test": "dotenv -e .env.test -- node --experimental-vm-modules node_modules/jest/bin/jest.js --passWithNoTests"
   },
