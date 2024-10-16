@@ -6,6 +6,7 @@ export const generateToken = (userData: IUser) => {
   const payload = {
     id: userData._id,
     email: userData.email,
+    username: userData.username,
   };
 
   return jwt.sign(payload, JWT_SECRET, {

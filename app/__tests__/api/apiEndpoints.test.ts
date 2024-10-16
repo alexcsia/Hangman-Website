@@ -88,29 +88,13 @@ describe("API tests", () => {
         password: hashedPassword,
       });
 
-      // const token = generateToken(user);
-
-      const token = jwt.sign(
-        {
-          username: "testusername",
-          email: "test@example.com",
-          id: user._id,
-        },
-        "DSA_STRONG",
-        {
-          expiresIn: "1h",
-        }
-      );
-
-      const decoded = jwt.decode(token);
-      console.log("ready to send this", decoded);
+      const token = generateToken(user);
 
       const response = await request(server)
         .get("/api/play/generate")
         .set("Authorization", `Bearer ${token}`);
 
       const receivedCode = response.body.code;
-      console.log("received code", receivedCode);
 
       const foundLobby = await Lobby.findOne({
         code: receivedCode,
