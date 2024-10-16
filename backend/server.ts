@@ -24,8 +24,6 @@ const startServer = async (): Promise<http.Server> => {
   const io = new Server(httpServer);
 
   io.on("connection", (socket) => {
-    console.log("a user connected");
-
     socket.on("joinLobby", (lobbyId) => {
       socket.join(lobbyId);
       console.log(`A user joined lobby: ${lobbyId}`);

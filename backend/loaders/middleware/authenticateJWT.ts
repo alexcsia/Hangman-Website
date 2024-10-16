@@ -1,11 +1,13 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
+import { IUser } from "../../modules/models/User.ts";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
 
 interface IJwtPayload {
   id: string;
   email: string;
+  username: string;
 }
 
 //adding optional user property
@@ -30,7 +32,11 @@ export const authenticateJWT = (
       throw new Error("Invalid token payload");
     }
 
-    req.user = { id: verifiedToken.id, email: verifiedToken.email };
+    req.user = {
+      id: verifiedToken.id,
+      email: verifiedToken.email,
+      username: verifiedToken.username,
+    };
     next();
   } catch (error: unknown) {
     if (error instanceof jwt.TokenExpiredError) {
@@ -47,14 +53,15 @@ export const authenticateJWT = (
   }
 };
 
-//  ensure the token has 'id' and 'email'
+//  ensure the token has id email and username
 function isJwtPayloadWithUserData(
   verifiedToken: unknown
-): verifiedToken is { id: string; email: string } {
+): verifiedToken is { id: string; email: string; username: string } {
   return (
     typeof verifiedToken === "object" &&
     verifiedToken != null &&
     "id" in verifiedToken &&
-    "email" in verifiedToken
+    "email" in verifiedToken &&
+    "username" in verifiedToken
   );
 }

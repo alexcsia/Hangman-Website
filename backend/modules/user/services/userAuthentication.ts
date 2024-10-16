@@ -22,9 +22,13 @@ export const loginUser = async (password: string, email: string) => {
     throw new Error("Invalid email or password");
   }
 
-  const token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, {
-    expiresIn: "2h",
-  });
+  const token = jwt.sign(
+    { id: user._id, email: user.email, username: user.username },
+    JWT_SECRET,
+    {
+      expiresIn: "2h",
+    }
+  );
 
   return token;
 };

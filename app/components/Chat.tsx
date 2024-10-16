@@ -17,16 +17,11 @@ const Chat: React.FC<ChatProps> = ({ lobbyId }) => {
     const port = window.location.port ? `:${window.location.port}` : "";
     const socketUrl = `${protocol}://${window.location.hostname}${port}`;
 
-    console.log("Connecting to:", socketUrl);
-
     socketRef.current = io(socketUrl);
 
     socketRef.current.emit("joinLobby", lobbyId);
-    console.log("Joining lobby:", lobbyId);
 
     socketRef.current.on("chat message", ({ msg }) => {
-      console.log("Reached");
-      console.log("Received message:", msg);
       setMessages((prevMessages) => [...prevMessages, msg]);
     });
 
