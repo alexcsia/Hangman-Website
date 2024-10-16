@@ -47,7 +47,7 @@ export const authenticateJWT = (
   }
 };
 
-// type guard to ensure the token has 'id' and 'email'
+//  ensure the token has 'id' and 'email'
 function isJwtPayloadWithUserData(
   verifiedToken: unknown
 ): verifiedToken is { id: string; email: string } {

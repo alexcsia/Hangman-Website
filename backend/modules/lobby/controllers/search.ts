@@ -24,7 +24,7 @@ export const searchLobby = async (
 
     await addPlayerToLobby(lobbyIdObject, userIdObject);
 
-    return res.status(200).json({ lobby: lobby._id });
+    return res.status(200).json({ lobbyId: lobby._id });
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error("Error adding player to lobby:", error.message);

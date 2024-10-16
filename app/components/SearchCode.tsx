@@ -1,11 +1,13 @@
 "use client";
 import React from "react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const SearchLobby = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [lobbyCode, setLobbyCode] = useState<string>("");
   const [token, setToken] = useState<string>("");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -33,8 +35,8 @@ const SearchLobby = () => {
         setErrorMessage(errorData.message);
         return;
       } else {
-        const data = await response.json();
-        console.log(data);
+        const { lobbyId } = await response.json();
+        router.push(`/play/${lobbyId}`);
       }
     } catch (error: unknown) {
       if (error instanceof Error) {

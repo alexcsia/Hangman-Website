@@ -1,7 +1,5 @@
 import React from "react";
 
-const PlayPage = () => {
-  return <div>play page</div>;
-};
+const PlayPage = () => {};
 
 export default PlayPage;
