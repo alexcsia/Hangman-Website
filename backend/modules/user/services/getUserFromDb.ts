@@ -17,7 +17,8 @@ export const getUserFromDb = async (userId: string) => {
     const sanitizedUsername = validator.escape(userData.username);
     return { email: userData.email, username: sanitizedUsername };
   } catch (error) {
-    console.error("Error extracting user from db", error);
-    throw new Error("Unable to retrieve user data");
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
   }
 };

@@ -9,9 +9,15 @@ export const addPlayerToLobby = async (
   const userInOtherLobby = await checkIfUserAlreadyInLobby(userId);
   if (userInOtherLobby) throw new Error("User is already part of a lobby");
 
-  await Lobby.findByIdAndUpdate(
-    lobbyId,
-    { $push: { players: userId } },
-    { new: true }
-  );
+  try {
+    await Lobby.findByIdAndUpdate(
+      lobbyId,
+      { $push: { players: userId } },
+      { new: true }
+    );
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(error.message || "Could not add user to the lobby");
+    }
+  }
 };

@@ -11,7 +11,7 @@ export const authenticateUser = async (req: Request, res: Response) => {
     if (error instanceof Error) {
       console.error("Error authenticating user:", error.message);
       return res.status(500).json({
-        message: "Authentication failed. Please try logging in again",
+        message: error.message,
       });
     }
   }

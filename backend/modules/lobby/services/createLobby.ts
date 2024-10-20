@@ -4,19 +4,25 @@ import { nanoid } from "nanoid";
 import { checkIfUserAlreadyInLobby } from "../utils/checkIfUserInLobby.ts";
 
 export const createLobby = async (userId: mongoose.Types.ObjectId) => {
-  const userInOtherLobby = await checkIfUserAlreadyInLobby(userId);
-  if (userInOtherLobby) throw new Error("User is already part of a lobby");
+  try {
+    const userInOtherLobby = await checkIfUserAlreadyInLobby(userId);
+    if (userInOtherLobby) throw new Error("User is already part of a lobby");
 
-  const inviteCode = await generateInviteCode();
+    const inviteCode = await generateInviteCode();
 
-  const lobby = await Lobby.create({
-    players: [userId],
-    status: "ongoing",
-    winner: "",
-    code: inviteCode,
-  });
+    const lobby = await Lobby.create({
+      players: [userId],
+      status: "ongoing",
+      winner: "",
+      code: inviteCode,
+    });
 
-  return lobby;
+    return lobby;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+  }
 };
 
 const generateInviteCode = async () => {

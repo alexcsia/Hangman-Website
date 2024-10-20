@@ -15,12 +15,17 @@ export const generateCodeAndLobby = async (
 
     const userIdObject = new mongoose.Types.ObjectId(userIdFromToken);
     const lobby = await createLobby(userIdObject);
+    if (!lobby) {
+      throw new Error("Could not create the lobby");
+    }
 
     return res.status(200).json({ code: lobby.code });
   } catch (error: unknown) {
     if (error instanceof Error) {
-      console.log("Error authenticating user:", error.message);
-      return res.status(500).json({ message: error.message });
+      console.log("Error creating lobby:", error.message);
+      return res
+        .status(500)
+        .json({ message: "Something went wrong... Please try again" });
     }
   }
 };

@@ -4,10 +4,7 @@ import { IAuthenticatedRequest } from "../../../loaders/middleware/authenticateJ
 import { addPlayerToLobby } from "../services/addPlayerToLobby.ts";
 import mongoose from "mongoose";
 
-export const searchLobby = async (
-  req: IAuthenticatedRequest,
-  res: Response
-) => {
+export const joinLobby = async (req: IAuthenticatedRequest, res: Response) => {
   try {
     const data = req.body;
     const lobby = await searchForLobby(data.lobbyCode);
@@ -27,10 +24,8 @@ export const searchLobby = async (
     return res.status(200).json({ lobbyId: lobby._id });
   } catch (error: unknown) {
     if (error instanceof Error) {
-      console.error("Error adding player to lobby:", error.message);
-      return res
-        .status(500)
-        .json({ message: "Could not add user to the lobby" });
+      console.error("Error when trying to join lobby:", error.message);
+      return res.status(500).json({ message: error.message });
     }
   }
 };
