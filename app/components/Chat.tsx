@@ -1,18 +1,37 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
+import { jwtDecode } from "jwt-decode";
 
 interface ChatProps {
   lobbyId: string;
 }
 
+interface DecodedToken {
+  username: string;
+}
+
 const Chat: React.FC<ChatProps> = ({ lobbyId }) => {
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<string[]>(() => {
+    const savedMessages = localStorage.getItem("chatMessages");
+    return savedMessages ? JSON.parse(savedMessages) : [];
+  });
   const [input, setInput] = useState<string>("");
   const socketRef = useRef<Socket | null>(null);
-  const username = "useeername";
+  const [username, setUsername] = useState<string | null>(null);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decodedToken = jwtDecode<DecodedToken>(token);
+        console.log(decodedToken);
+        setUsername(decodedToken.username);
+      } catch (error) {
+        console.error("Failed to decode token:", error);
+      }
+    }
+
     const protocol = window.location.protocol === "https" ? "wss" : "ws";
     const port = window.location.port ? `:${window.location.port}` : "";
     const socketUrl = `${protocol}://${window.location.hostname}${port}`;
@@ -22,14 +41,16 @@ const Chat: React.FC<ChatProps> = ({ lobbyId }) => {
     socketRef.current.emit("joinLobby", lobbyId);
 
     socketRef.current.on("chat message", ({ msg }) => {
-      setMessages((prevMessages) => [...prevMessages, msg]);
+      const newMessages = [...messages, msg];
+      setMessages(newMessages);
+      localStorage.setItem("chatMessages", JSON.stringify(newMessages));
     });
 
     return () => {
       socketRef.current?.off("chat message");
       socketRef.current?.disconnect();
     };
-  }, [lobbyId]);
+  }, [lobbyId, messages]);
 
   const sendMessage = () => {
     console.log("Sending messages:", messages);
