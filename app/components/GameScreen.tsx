@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
 
-// Interface for individual player's state
 interface PlayerState {
   guessedLetters: string[];
   remainingAttempts: number;
 }
 
-// Interface for the overall game state
 interface GameState {
   word: string;
   playerState: PlayerState;
@@ -33,10 +31,8 @@ const GameScreen = ({
 
     socketRef.current = io(socketUrl);
 
-    // Emit the joinLobby event
     socketRef.current.emit("joinLobby", { lobbyId, playerId });
 
-    // Set up the game update listener
     socketRef.current.on("gameUpdate", (updatedState: GameState) => {
       console.log("Updated State:", updatedState);
       console.log("player state:", updatedState.playerState);
@@ -44,7 +40,6 @@ const GameScreen = ({
       setCurrentWord(updatedState.word);
     });
 
-    // Set up the game over listener
     socketRef.current.on("gameOver", (result) => {
       setGameOver(result);
       alert(result);
@@ -73,7 +68,7 @@ const GameScreen = ({
   if (!playerState || !currentWord) {
     return <div>Loading game...</div>;
   }
-
+  // TODO: style this
   return (
     <div>
       <h1>Hangman Game</h1>

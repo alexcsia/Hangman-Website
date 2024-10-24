@@ -26,7 +26,7 @@ export const handleIoEvents = (httpServer: http.Server) => {
 
         // Initialize lobby if it doesn't exist
         if (!lobbies[lobbyId]) {
-          const randomWord = "example"; // Fetch or generate a random word here
+          const randomWord = "example";
           lobbies[lobbyId] = {
             word: randomWord,
             players: {},
