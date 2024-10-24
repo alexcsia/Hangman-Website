@@ -11,6 +11,7 @@ const LobbySchema: Schema = new Schema({
   players: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   status: {
     type: String,
+    enum: ["ongoing", "ended"],
     default: "ongoing",
   },
   winner: {

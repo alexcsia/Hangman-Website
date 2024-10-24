@@ -34,9 +34,9 @@ const LoginForm: React.FC = () => {
 
         const data = await response.json();
         const token = data.token;
-        localStorage.setItem("token", token);
+        sessionStorage.setItem("token", token);
 
-        console.log("this is the token:", localStorage.getItem("token"));
+        console.log("this is the token:", sessionStorage.getItem("token"));
         console.log(data);
       }
 

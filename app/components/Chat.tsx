@@ -2,30 +2,36 @@
 import React, { useState, useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
 import { jwtDecode } from "jwt-decode";
+import DOMPurify from "dompurify";
 
 interface ChatProps {
   lobbyId: string;
+  playerId: string;
 }
 
 interface DecodedToken {
+  id: string;
+  email: string;
   username: string;
 }
 
-const Chat: React.FC<ChatProps> = ({ lobbyId }) => {
-  const [messages, setMessages] = useState<string[]>(() => {
-    const savedMessages = localStorage.getItem("chatMessages");
-    return savedMessages ? JSON.parse(savedMessages) : [];
-  });
+const Chat: React.FC<ChatProps> = ({ lobbyId, playerId }) => {
+  const [messages, setMessages] = useState<string[]>([]);
   const [input, setInput] = useState<string>("");
   const socketRef = useRef<Socket | null>(null);
-  const [username, setUsername] = useState<string | null>(null);
+  const [username, setUsername] = useState<string>("");
+  const maxMessageSize = 200;
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const savedMessages = localStorage.getItem("chatMessages");
+    if (savedMessages) setMessages(JSON.parse(savedMessages));
+  }, []);
+
+  useEffect(() => {
+    const token = sessionStorage.getItem("token");
     if (token) {
       try {
         const decodedToken = jwtDecode<DecodedToken>(token);
-        console.log(decodedToken);
         setUsername(decodedToken.username);
       } catch (error) {
         console.error("Failed to decode token:", error);
@@ -37,13 +43,14 @@ const Chat: React.FC<ChatProps> = ({ lobbyId }) => {
     const socketUrl = `${protocol}://${window.location.hostname}${port}`;
 
     socketRef.current = io(socketUrl);
-
-    socketRef.current.emit("joinLobby", lobbyId);
+    socketRef.current.emit("joinLobby", { lobbyId, playerId });
 
     socketRef.current.on("chat message", ({ msg }) => {
-      const newMessages = [...messages, msg];
-      setMessages(newMessages);
-      localStorage.setItem("chatMessages", JSON.stringify(newMessages));
+      setMessages((prevMessages) => {
+        const newMessages = [...prevMessages, msg];
+        localStorage.setItem("chatMessages", JSON.stringify(newMessages));
+        return newMessages;
+      });
     });
 
     return () => {
@@ -53,11 +60,14 @@ const Chat: React.FC<ChatProps> = ({ lobbyId }) => {
   }, [lobbyId, messages]);
 
   const sendMessage = () => {
-    console.log("Sending messages:", messages);
     if (input.trim() && socketRef.current) {
+      const sanitizedMsg = DOMPurify.sanitize(input);
+      const sanitizedUsername = DOMPurify.sanitize(username);
+      if (sanitizedMsg.length > maxMessageSize) return;
+
       socketRef.current.emit("chat message", {
         lobbyId,
-        msg: `${username}: ${input}`,
+        msg: `${sanitizedUsername}: ${sanitizedMsg}`,
       });
       setInput("");
     }
@@ -79,6 +89,7 @@ const Chat: React.FC<ChatProps> = ({ lobbyId }) => {
           onChange={(e) => setInput(e.target.value)}
           className="border border-gray-300 p-2 w-full"
           placeholder="Type your message"
+          maxLength={200}
         />
         <button
           onClick={sendMessage}

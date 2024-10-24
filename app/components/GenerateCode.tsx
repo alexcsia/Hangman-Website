@@ -8,7 +8,7 @@ const GenerateCode = () => {
   const [code, setCode] = useState<string>("");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
 
     if (!token) {
       setErrorMessage("Please log in first");
