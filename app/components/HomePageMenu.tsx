@@ -12,7 +12,7 @@ const HomePageMenu = () => {
 
       <div className="flex flex-col space-y-4 mx-auto my-10 w-1/4">
         <Link
-          href="/users/signup"
+          href="/play/connect"
           className=" custom-link mb-7 h-15 text-center text-2xl flex items-center justify-center"
         >
           PLAY

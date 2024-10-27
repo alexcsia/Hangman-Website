@@ -1,8 +1,6 @@
 import React from "react";
 import Chat from "../components/Chat";
 
-const PlayPage = () => {
-  //   <Chat lobbyId={lobbyId}></Chat>;
-};
+const PlayPage = () => {};
 
 export default PlayPage;
