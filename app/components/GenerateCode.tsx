@@ -3,7 +3,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 
 interface GenerateCodeProps {
-  token: string;
+  token: string | null;
 }
 
 const GenerateCode: React.FC<GenerateCodeProps> = ({ token }) => {
@@ -11,11 +11,11 @@ const GenerateCode: React.FC<GenerateCodeProps> = ({ token }) => {
   const [code, setCode] = useState<string>("");
 
   useEffect(() => {
-    if (!token) {
+    if (token === null) {
       setErrorMessage("Please log in first");
       return;
     }
-  }, [code]);
+  }, [token]);
 
   const handleClick = async () => {
     try {

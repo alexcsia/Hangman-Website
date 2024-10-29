@@ -1,27 +1,34 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { IUser } from "../../backend/modules/models/User";
 
-const UserProfile = () => {
+interface UserProfileProps {
+  token: string | null;
+}
+
+const UserProfile: React.FC<UserProfileProps> = ({ token }) => {
   const [userData, setUserData] = useState<IUser | null>(null);
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const { userId } = useParams();
-  const router = useRouter();
+
+  console.log("aici", token);
 
   useEffect(() => {
-    const token = sessionStorage.getItem("token");
-
-    if (!token) {
-      router.push("/users/login");
+    if (token === null) {
+      setError("Please log in first");
+      setLoading(false);
       return;
     }
+  }, [token]);
 
+  useEffect(() => {
     const fetchUserProfile = async () => {
-      if (!userId) return;
+      if (!userId || !token) return;
 
       try {
+        console.log("fetching with token:", token);
         const res = await fetch(`/api/users/user/${userId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -45,7 +52,7 @@ const UserProfile = () => {
     };
 
     fetchUserProfile();
-  }, []);
+  }, [token]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;

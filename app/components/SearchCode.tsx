@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 interface SearchLobbyProps {
-  token: string;
+  token: string | null;
 }
 const SearchLobby: React.FC<SearchLobbyProps> = ({ token }) => {
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -12,13 +12,15 @@ const SearchLobby: React.FC<SearchLobbyProps> = ({ token }) => {
 
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!token) {
+  useEffect(() => {
+    if (token === null) {
       setErrorMessage("Please log in first");
       return;
     }
+  }, [token]);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
     try {
       const response = await fetch("/api/play/find", {
