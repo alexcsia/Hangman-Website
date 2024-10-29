@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "dotenv -e .env.production -- node --loader ts-node/esm backend/startServer.ts",
     "lint": "next lint",
-    "test": "dotenv -e .env.test -- node --experimental-vm-modules node_modules/jest/bin/jest.js --passWithNoTests"
+    "test": "dotenv -e .env.development -- node --experimental-vm-modules node_modules/jest/bin/jest.js --passWithNoTests"
   },
   "dependencies": {
     "@types/validator": "^13.12.2",

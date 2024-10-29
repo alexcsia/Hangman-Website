@@ -37,7 +37,7 @@ const ConnectPage = () => {
     } catch {
       router.push("/users/login");
     }
-  }, []);
+  }, [router]);
 
   return (
     <main>

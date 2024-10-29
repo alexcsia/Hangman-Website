@@ -36,7 +36,7 @@ const ProfilePage = () => {
     } catch {
       router.push("/users/login");
     }
-  }, []);
+  }, [router]);
   return (
     <main>
       <UserProfile token={token || ""}></UserProfile>

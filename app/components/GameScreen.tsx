@@ -50,7 +50,7 @@ const GameScreen = ({
       socketRef.current?.off("gameOver");
       socketRef.current?.disconnect();
     };
-  }, []);
+  }, [playerId, lobbyId]);
 
   const handleGuess = () => {
     console.log(lobbyId);
@@ -80,7 +80,7 @@ const GameScreen = ({
             Word:{" "}
             {currentWord
               .split("")
-              .map((letter, idx) =>
+              .map((letter) =>
                 playerState.guessedLetters.includes(letter) ? letter : "_"
               )
               .join(" ")}

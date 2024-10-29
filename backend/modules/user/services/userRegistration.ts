@@ -25,7 +25,6 @@ export const addUser = async (userData: IUser) => {
 
 const validateUsername = (username: string): string => {
   username = username.trim();
-  console.log(username);
   if (!validator.isLength(username, { min: 1, max: 20 })) {
     throw new Error("Username must be between 1 and 20 characters");
   }

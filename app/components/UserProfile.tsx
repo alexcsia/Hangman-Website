@@ -52,7 +52,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ token }) => {
     };
 
     fetchUserProfile();
-  }, [token]);
+  }, [token, userId]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;

@@ -1,28 +1,19 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
-import { jwtDecode } from "jwt-decode";
 import DOMPurify from "dompurify";
-import { useRouter } from "next/navigation";
 
 interface ChatProps {
   lobbyId: string;
   playerId: string;
-}
-
-interface DecodedToken {
-  id: string;
-  email: string;
   username: string;
 }
 
-const Chat: React.FC<ChatProps> = ({ lobbyId, playerId }) => {
+const Chat: React.FC<ChatProps> = ({ lobbyId, playerId, username }) => {
   const [messages, setMessages] = useState<string[]>([]);
   const [input, setInput] = useState<string>("");
   const socketRef = useRef<Socket | null>(null);
-  const [username, setUsername] = useState<string>("");
   const maxMessageSize = 200;
-  const router = useRouter();
 
   useEffect(() => {
     const savedMessages = localStorage.getItem("chatMessages");
@@ -30,19 +21,6 @@ const Chat: React.FC<ChatProps> = ({ lobbyId, playerId }) => {
   }, []);
 
   useEffect(() => {
-    const token = sessionStorage.getItem("token");
-
-    if (token) {
-      try {
-        const decodedToken = jwtDecode<DecodedToken>(token);
-        setUsername(decodedToken.username);
-      } catch (error) {
-        console.error("Token invalid or expired");
-        sessionStorage.removeItem("token");
-        router.push("/users/login");
-      }
-    }
-
     const protocol = window.location.protocol === "https" ? "wss" : "ws";
     const port = window.location.port ? `:${window.location.port}` : "";
     const socketUrl = `${protocol}://${window.location.hostname}${port}`;
@@ -61,8 +39,9 @@ const Chat: React.FC<ChatProps> = ({ lobbyId, playerId }) => {
     return () => {
       socketRef.current?.off("chat message");
       socketRef.current?.disconnect();
+      localStorage.removeItem("chatMessages");
     };
-  }, [lobbyId, messages]);
+  }, [lobbyId, messages, playerId]);
 
   const sendMessage = () => {
     if (input.trim() && socketRef.current) {

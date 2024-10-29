@@ -15,6 +15,7 @@ const PlayPage = () => {
   const router = useRouter();
   const { lobbyId } = useParams();
   const [playerId, setPlayerId] = useState<string | null>(null);
+  const [username, setUsername] = useState<string>("");
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
@@ -27,6 +28,7 @@ const PlayPage = () => {
     try {
       const decoded: DecodedToken = jwtDecode(token);
       setPlayerId(decoded.id);
+      setUsername(decoded.username);
     } catch (error) {
       console.error("Invalid token:", error);
       sessionStorage.removeItem("token");
@@ -34,13 +36,13 @@ const PlayPage = () => {
     }
   }, [router]);
 
-  if (!lobbyId || typeof lobbyId !== "string" || !playerId) {
+  if (!lobbyId || typeof lobbyId !== "string" || !playerId || !username) {
     return <div>Loading...</div>;
   }
 
   return (
     <div>
-      <Chat lobbyId={lobbyId} playerId={playerId}></Chat>
+      <Chat lobbyId={lobbyId} playerId={playerId} username={username}></Chat>
       <GameScreen lobbyId={lobbyId} playerId={playerId}></GameScreen>
     </div>
   );
