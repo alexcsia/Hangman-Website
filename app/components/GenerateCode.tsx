@@ -2,19 +2,18 @@
 import React from "react";
 import { useState, useEffect } from "react";
 
-const GenerateCode = () => {
+interface GenerateCodeProps {
+  token: string;
+}
+
+const GenerateCode: React.FC<GenerateCodeProps> = ({ token }) => {
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [token, setToken] = useState<string>("");
   const [code, setCode] = useState<string>("");
 
   useEffect(() => {
-    const token = sessionStorage.getItem("token");
-
     if (!token) {
       setErrorMessage("Please log in first");
       return;
-    } else {
-      setToken(token);
     }
   }, [code]);
 
@@ -37,7 +36,7 @@ const GenerateCode = () => {
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
-        console.error("Authentication error", error.message);
+        console.error("Authentication error", error);
         setErrorMessage(error.message);
       }
     }

@@ -28,8 +28,6 @@ const SignUpForm: React.FC = () => {
         return;
       } else {
         setIsSuccessful(true);
-        const data = await response.json();
-        console.log(data);
       }
 
       setUsername("");

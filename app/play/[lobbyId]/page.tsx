@@ -18,16 +18,19 @@ const PlayPage = () => {
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
-    if (token) {
-      try {
-        const decoded: DecodedToken = jwtDecode(token);
-        setPlayerId(decoded.id);
-      } catch (error) {
-        console.error("Invalid token:", error);
-        router.push("/login");
-      }
-    } else {
-      router.push("/login");
+
+    if (!token) {
+      router.push("/users/login");
+      return;
+    }
+
+    try {
+      const decoded: DecodedToken = jwtDecode(token);
+      setPlayerId(decoded.id);
+    } catch (error) {
+      console.error("Invalid token:", error);
+      sessionStorage.removeItem("token");
+      router.push("/users/login");
     }
   }, [router]);
 

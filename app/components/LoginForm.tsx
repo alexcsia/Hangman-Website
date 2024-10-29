@@ -35,9 +35,6 @@ const LoginForm: React.FC = () => {
         const data = await response.json();
         const token = data.token;
         sessionStorage.setItem("token", token);
-
-        console.log("this is the token:", sessionStorage.getItem("token"));
-        console.log(data);
       }
 
       setEmail("");

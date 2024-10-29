@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { IUser } from "../../backend/modules/models/User";
 
 const UserProfile = () => {
@@ -8,13 +8,13 @@ const UserProfile = () => {
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const { userId } = useParams();
+  const router = useRouter();
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
 
     if (!token) {
-      setError("No token found, please log in.");
-      setLoading(false);
+      router.push("/users/login");
       return;
     }
 

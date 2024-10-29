@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
 import { jwtDecode } from "jwt-decode";
 import DOMPurify from "dompurify";
+import { useRouter } from "next/navigation";
 
 interface ChatProps {
   lobbyId: string;
@@ -21,6 +22,7 @@ const Chat: React.FC<ChatProps> = ({ lobbyId, playerId }) => {
   const socketRef = useRef<Socket | null>(null);
   const [username, setUsername] = useState<string>("");
   const maxMessageSize = 200;
+  const router = useRouter();
 
   useEffect(() => {
     const savedMessages = localStorage.getItem("chatMessages");
@@ -29,12 +31,15 @@ const Chat: React.FC<ChatProps> = ({ lobbyId, playerId }) => {
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
+
     if (token) {
       try {
         const decodedToken = jwtDecode<DecodedToken>(token);
         setUsername(decodedToken.username);
       } catch (error) {
-        console.error("Failed to decode token:", error);
+        console.error("Token invalid or expired");
+        sessionStorage.removeItem("token");
+        router.push("/users/login");
       }
     }
 

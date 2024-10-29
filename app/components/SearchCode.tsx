@@ -3,21 +3,21 @@ import React from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-const SearchLobby = () => {
+interface SearchLobbyProps {
+  token: string;
+}
+const SearchLobby: React.FC<SearchLobbyProps> = ({ token }) => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [lobbyCode, setLobbyCode] = useState<string>("");
-  const [token, setToken] = useState<string>("");
+
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const token = sessionStorage.getItem("token");
 
     if (!token) {
       setErrorMessage("Please log in first");
       return;
-    } else {
-      setToken(token);
     }
 
     try {

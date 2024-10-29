@@ -32,5 +32,5 @@ ENV NODE_ENV=production
 # Expose the port your app will run on
 EXPOSE 3000
 
-# Start the backend (adjust if necessary)
+# Start the backend 
 CMD ["npm", "start"]
