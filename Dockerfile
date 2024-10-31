@@ -1,36 +1,25 @@
-# Stage 1: Build the Next.js frontend
-FROM node:18-alpine AS build
+#stage 1: build 
+FROM node:18 AS build
 
-# Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json to install dependencies
-COPY package.json ./
-COPY package-lock.json ./
+COPY package*.json ./
 
-# Install production dependencies
-RUN npm ci --only=production
+RUN npm install
 
-# Copy the entire source code
 COPY . .
 
-# Build the frontend (Next.js)
 RUN npm run build
+#stage 2: run in production
 
-# Stage 2: Create a production-ready image
-FROM node:18-alpine
+FROM node:18
 
-# Set working directory for production
 WORKDIR /app
 
-# Copy only the built code and necessary dependencies from the previous stage
-COPY --from=build /app /app
+COPY --from=build /app ./
 
-# Set environment to production
-ENV NODE_ENV=production
+RUN npm install 
 
-# Expose the port your app will run on
 EXPOSE 3000
 
-# Start the backend 
 CMD ["npm", "start"]
