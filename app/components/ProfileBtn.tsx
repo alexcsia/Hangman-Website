@@ -1,8 +1,7 @@
 import React from "react";
 import { jwtDecode } from "jwt-decode";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { decode } from "punycode";
 
 interface ProfileBtnProps {
   token: string;
