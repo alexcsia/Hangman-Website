@@ -5,6 +5,7 @@ import SearchLobby from "@/app/components/SearchCode";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
+import Link from "next/link";
 
 interface DecodedToken {
   id: string;
@@ -41,6 +42,11 @@ const ConnectPage = () => {
 
   return (
     <main>
+      <div className="mb-12 mr-80">
+        <Link href="/" className="custom-link p-3">
+          Home
+        </Link>
+      </div>
       <SearchLobby token={token || ""}></SearchLobby>
       <GenerateCode token={token || ""}></GenerateCode>
     </main>

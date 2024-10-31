@@ -59,7 +59,7 @@ const LoginForm: React.FC = () => {
 
   return (
     <>
-      <div className="bg-slate-300 mx-auto my-52 w-1/4 h-80 flex flex-col items-center justify-center rounded">
+      <div className="bg-slate-300 mx-auto my-45 w-1/4 h-80 flex flex-col items-center justify-center rounded">
         <form
           className="flex flex-col items-center justify-center "
           onSubmit={handleSubmit}

@@ -58,10 +58,16 @@ const UserProfile: React.FC<UserProfileProps> = ({ token }) => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="bg-slate-300 mx-auto my-52 w-1/4 h-80 flex flex-col items-center justify-center rounded">
-      <label>Username: {userData?.username}</label>
-      <label>Email: {userData?.email}</label>
-    </div>
+    <>
+      <div className="bg-slate-300 mx-auto my-45 w-1/4 h-80 flex flex-col items-center justify-center rounded">
+        <label className="text-lg text-gray-800 mb-1">
+          Username: <span className="font-semibold">{userData?.username}</span>
+        </label>
+        <label className="text-lg text-gray-800">
+          Email: <span className="font-semibold">{userData?.email}</span>
+        </label>
+      </div>
+    </>
   );
 };
 

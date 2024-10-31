@@ -4,6 +4,7 @@ import UserProfile from "@/app/components/UserProfile";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
+import Link from "next/link";
 
 interface DecodedToken {
   id: string;
@@ -39,6 +40,11 @@ const ProfilePage = () => {
   }, [router]);
   return (
     <main>
+      <div className=" mb-1 mr-80">
+        <Link href="/" className="custom-link p-3">
+          Home
+        </Link>
+      </div>
       <UserProfile token={token || ""}></UserProfile>
     </main>
   );
