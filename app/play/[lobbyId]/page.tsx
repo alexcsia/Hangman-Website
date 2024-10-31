@@ -41,10 +41,21 @@ const PlayPage = () => {
   }
 
   return (
-    <div>
-      <Chat lobbyId={lobbyId} playerId={playerId} username={username}></Chat>
-      <GameScreen lobbyId={lobbyId} playerId={playerId}></GameScreen>
-    </div>
+    <>
+      {" "}
+      <div className="flex flex-row items-center justify-center w-auto space-x-10 mx-auto min-h-screen rounded">
+        <div className="flex flex-col rounded bg-slate-300 h-[400px] w-[500px] items-center justify-center">
+          <GameScreen lobbyId={lobbyId} playerId={playerId}></GameScreen>
+        </div>
+        <div>
+          <Chat
+            lobbyId={lobbyId}
+            playerId={playerId}
+            username={username}
+          ></Chat>
+        </div>
+      </div>
+    </>
   );
 };
 

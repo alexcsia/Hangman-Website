@@ -71,12 +71,14 @@ const GameScreen = ({
   // TODO: style this
   return (
     <div>
-      <h1>Hangman Game</h1>
+      <h1 className="text-center text-xl font-semibold text-slate-600 mb-3 ">
+        Hangman Game
+      </h1>
       {gameOver ? (
         <p>{gameOver}</p>
       ) : (
         <>
-          <p>
+          <p className="font-bold text-3xl text-slate-700 my-20">
             Word:{" "}
             {currentWord
               .split("")
@@ -85,16 +87,27 @@ const GameScreen = ({
               )
               .join(" ")}
           </p>
-          <p>Remaining attempts: {playerState.remainingAttempts}</p>
+
           <input
             value={guess}
             onChange={(e) => setGuess(e.target.value)}
             maxLength={1}
             disabled={gameOver !== null}
+            className="rounded mx-2"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleGuess();
+            }}
           />
-          <button onClick={handleGuess} disabled={gameOver !== null}>
+          <button
+            onClick={handleGuess}
+            disabled={gameOver !== null}
+            className="my-2 px-2"
+          >
             Guess
           </button>
+          <p className="text-lg font-semibold text-slate-600 mb-3">
+            Remaining attempts: {playerState.remainingAttempts}
+          </p>
         </>
       )}
     </div>

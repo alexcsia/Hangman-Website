@@ -59,25 +59,28 @@ const Chat: React.FC<ChatProps> = ({ lobbyId, playerId, username }) => {
 
   return (
     <div>
-      <h1>Chat with your opponent</h1>
-      <div className="border border-black p-2 mb-2 h-[300px] overflow-y-scroll">
+      <h1 className="text-slate-700">Chat with your opponent</h1>
+      <div className="border rounded border-gray-700 p-2 mb-2 h-[300px] w-[300px] overflow-y-scroll">
         {messages.map((msg, index) => (
           <div key={index}>{msg}</div>
         ))}
       </div>
 
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-2 ">
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          className="border border-gray-300 p-2 w-full"
+          className="border border-gray-300 p-2 rounded"
           placeholder="Type your message"
           maxLength={200}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") sendMessage();
+          }}
         />
         <button
           onClick={sendMessage}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md"
+          className="bg-blue-500 text-white px-3 py-1 rounded-md"
         >
           Send
         </button>
