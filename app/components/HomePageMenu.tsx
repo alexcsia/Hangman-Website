@@ -2,12 +2,12 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import React from "react";
+import ProfileBtn from "./ProfileBtn";
 
 const HomePageMenu = () => {
-  const [tokenExists, setTokenExists] = useState(false);
+  const [token, setToken] = useState<string | null>("");
   useEffect(() => {
-    const token = sessionStorage.getItem("token");
-    if (token) setTokenExists(true);
+    setToken(sessionStorage.getItem("token"));
   }, []);
 
   return (
@@ -25,7 +25,7 @@ const HomePageMenu = () => {
         >
           PLAY
         </Link>
-        {!tokenExists && (
+        {!token && (
           <>
             <Link href="/users/login" className="custom-link">
               Login
@@ -37,8 +37,9 @@ const HomePageMenu = () => {
           </>
         )}
       </div>
-      <div className="flex flex-row">
-        <Link href="/users/signup" className="custom-link p-3">
+      <div className="flex flex-col space-y-4">
+        {token && <ProfileBtn token={token} />}
+        <Link href="/about" className=" ml-2 custom-link p-3 w-20 ">
           About
         </Link>
       </div>
