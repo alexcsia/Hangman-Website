@@ -31,7 +31,6 @@ const Chat: React.FC<ChatProps> = ({ lobbyId, playerId, username }) => {
     socketRef.current.on("chat message", ({ msg }) => {
       setMessages((prevMessages) => {
         const newMessages = [...prevMessages, msg];
-        localStorage.setItem("chatMessages", JSON.stringify(newMessages));
         return newMessages;
       });
     });
@@ -41,7 +40,11 @@ const Chat: React.FC<ChatProps> = ({ lobbyId, playerId, username }) => {
       socketRef.current?.disconnect();
       localStorage.removeItem("chatMessages");
     };
-  }, [lobbyId, messages, playerId]);
+  }, [lobbyId, playerId]);
+
+  useEffect(() => {
+    localStorage.setItem("chatMessages", JSON.stringify(messages));
+  }, [messages]);
 
   const sendMessage = () => {
     if (input.trim() && socketRef.current) {
