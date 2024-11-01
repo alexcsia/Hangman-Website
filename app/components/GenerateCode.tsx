@@ -32,6 +32,9 @@ const GenerateCode: React.FC<GenerateCodeProps> = ({ token }) => {
         return;
       } else {
         const data = await response.json();
+
+        window.location.href = data.redirectUrl;
+
         setCode(data.code);
       }
     } catch (error: unknown) {

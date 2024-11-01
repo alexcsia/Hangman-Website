@@ -37,8 +37,8 @@ const SearchLobby: React.FC<SearchLobbyProps> = ({ token }) => {
         setErrorMessage(errorData.message);
         return;
       } else {
-        const { lobbyId } = await response.json();
-        router.push(`/play/${lobbyId}`);
+        const data = await response.json();
+        window.location.href = data.redirectUrl;
       }
     } catch (error: unknown) {
       if (error instanceof Error) {

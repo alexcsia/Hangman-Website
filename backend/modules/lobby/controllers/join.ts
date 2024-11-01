@@ -21,7 +21,8 @@ export const joinLobby = async (req: IAuthenticatedRequest, res: Response) => {
 
     await addPlayerToLobby(lobbyIdObject, userIdObject);
 
-    return res.status(200).json({ lobbyId: lobby._id });
+    // return res.status(200).json({ lobbyId: lobby._id });
+    return res.json({ redirectUrl: `/play/${lobby._id}?code=${lobby.code}` });
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error("Error when trying to join lobby:", error.message);

@@ -2,7 +2,6 @@ import next from "next";
 import http from "http";
 import { Server } from "socket.io";
 
-// Game state per lobby
 interface PlayerState {
   guessedLetters: string[];
   remainingAttempts: number;
@@ -13,7 +12,7 @@ interface GameState {
   players: Record<string, PlayerState>;
 }
 
-const lobbies: Record<string, GameState> = {}; // Store game state per lobby
+const lobbies: Record<string, GameState> = {};
 
 export const handleIoEvents = (httpServer: http.Server) => {
   try {
@@ -24,7 +23,6 @@ export const handleIoEvents = (httpServer: http.Server) => {
         socket.join(lobbyId);
         console.log(`Player ${playerId} joined lobby: ${lobbyId}`);
 
-        // Initialize lobby if it doesn't exist
         if (!lobbies[lobbyId]) {
           const randomWord = "example";
           lobbies[lobbyId] = {
@@ -33,7 +31,6 @@ export const handleIoEvents = (httpServer: http.Server) => {
           };
         }
 
-        // Initialize player state if it doesn't exist
         if (!lobbies[lobbyId].players[playerId]) {
           lobbies[lobbyId].players[playerId] = {
             guessedLetters: [],
@@ -41,7 +38,7 @@ export const handleIoEvents = (httpServer: http.Server) => {
           };
         }
 
-        // Emit the initial game state to the player
+        // emit the initial game state to each player
         const playerState = lobbies[lobbyId].players[playerId];
         socket.emit("gameUpdate", {
           word: lobbies[lobbyId].word,
@@ -62,20 +59,17 @@ export const handleIoEvents = (httpServer: http.Server) => {
             if (!playerState.guessedLetters.includes(letter)) {
               playerState.guessedLetters.push(letter);
 
-              // Check if the letter is in the word
               if (!lobby.word.includes(letter)) {
                 playerState.remainingAttempts--;
               }
             }
 
-            // Emit updated game state to all players in the lobby
             socket.emit("gameUpdate", {
               word: lobby.word,
               wordLength: lobby.word.length,
               playerState: playerState,
             });
 
-            // Check for win condition
             const isGameWon = lobby.word
               .split("")
               .every((letter) => playerState.guessedLetters.includes(letter));
@@ -85,7 +79,6 @@ export const handleIoEvents = (httpServer: http.Server) => {
               return;
             }
 
-            // Check for game over condition
             const allPlayersLost = Object.values(lobby.players).every(
               (player) => player.remainingAttempts === 0
             );
