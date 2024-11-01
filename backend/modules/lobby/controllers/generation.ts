@@ -18,8 +18,7 @@ export const generateCodeAndLobby = async (
     if (!lobby) {
       throw new Error("Could not create the lobby");
     }
-    console.log("new lobby id:", lobby._id);
-    // return res.status(200).json({ code: lobby.code });
+
     return res.json({ redirectUrl: `/play/${lobby._id}?code=${lobby.code}` });
   } catch (error: unknown) {
     if (error instanceof Error) {
