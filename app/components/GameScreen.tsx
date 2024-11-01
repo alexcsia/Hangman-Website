@@ -14,9 +14,11 @@ interface GameState {
 const GameScreen = ({
   lobbyId,
   playerId,
+  username,
 }: {
   lobbyId: string;
   playerId: string;
+  username: string;
 }) => {
   const [playerState, setPlayerState] = useState<PlayerState | null>(null);
   const [guess, setGuess] = useState<string>("");
@@ -34,15 +36,12 @@ const GameScreen = ({
     socketRef.current.emit("joinLobby", { lobbyId, playerId });
 
     socketRef.current.on("gameUpdate", (updatedState: GameState) => {
-      console.log("Updated State:", updatedState);
-      console.log("player state:", updatedState.playerState);
       setPlayerState(updatedState.playerState);
       setCurrentWord(updatedState.word);
     });
 
     socketRef.current.on("gameOver", (result) => {
       setGameOver(result);
-      alert(result);
     });
 
     return () => {
@@ -60,6 +59,7 @@ const GameScreen = ({
         lobbyId,
         playerId,
         letter: guess.toLowerCase(),
+        username,
       });
     }
     setGuess("");
@@ -68,14 +68,14 @@ const GameScreen = ({
   if (!playerState || !currentWord) {
     return <div>Loading game...</div>;
   }
-  // TODO: style this
+
   return (
     <div>
       <h1 className="text-center text-xl font-semibold text-slate-600 mb-3 ">
         Hangman Game
       </h1>
       {gameOver ? (
-        <p>{gameOver}</p>
+        <p className="text-2xl font-semibold text-slate-600 mb-3">{gameOver}</p>
       ) : (
         <>
           <p className="font-bold text-3xl text-slate-700 my-20">

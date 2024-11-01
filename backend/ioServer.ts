@@ -51,7 +51,7 @@ export const handleIoEvents = (httpServer: http.Server) => {
           io.to(lobbyId).emit("chat message", { msg });
         });
 
-        socket.on("makeGuess", ({ lobbyId, playerId, letter }) => {
+        socket.on("makeGuess", ({ lobbyId, playerId, letter, username }) => {
           const lobby = lobbies[lobbyId];
           const playerState = lobby?.players[playerId];
 
@@ -75,7 +75,7 @@ export const handleIoEvents = (httpServer: http.Server) => {
               .every((letter) => playerState.guessedLetters.includes(letter));
 
             if (isGameWon) {
-              io.to(lobbyId).emit("gameOver", `Player ${playerId} won!`);
+              io.to(lobbyId).emit("gameOver", ` ${username} won!`);
               return;
             }
 

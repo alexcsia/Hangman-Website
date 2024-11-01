@@ -52,7 +52,11 @@ const PlayPage = () => {
           </p>
         </div>
         <div className="flex flex-col rounded bg-slate-300 h-[400px] w-[500px] items-center justify-center">
-          <GameScreen lobbyId={lobbyId} playerId={playerId}></GameScreen>
+          <GameScreen
+            lobbyId={lobbyId}
+            playerId={playerId}
+            username={username}
+          ></GameScreen>
         </div>
         <div>
           <Chat
