@@ -14,6 +14,7 @@ export const addUser = async (userData: IUser) => {
       username: validatedUsername,
       email: validatedEmail,
       password: validatedHashedPassword,
+      winNum: 0,
     });
     await newUser.save();
   } catch (error: unknown) {

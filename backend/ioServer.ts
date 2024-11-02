@@ -1,6 +1,7 @@
 import next from "next";
 import http from "http";
 import { Server } from "socket.io";
+import addWinToUser from "./modules/user/services/addWinToUser.ts";
 
 interface PlayerState {
   guessedLetters: string[];
@@ -77,6 +78,7 @@ export const handleIoEvents = (httpServer: http.Server) => {
 
           if (isGameWon) {
             io.to(lobbyId).emit("gameOver", ` ${username} won!`);
+            addWinToUser(playerId).catch((error) => console.log(error));
             return;
           }
 

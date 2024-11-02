@@ -4,6 +4,7 @@ export interface IUser extends Document {
   username: string;
   email: string;
   password: string;
+  winNum: Number;
 }
 
 const UserSchema: Schema = new Schema({
@@ -20,6 +21,10 @@ const UserSchema: Schema = new Schema({
     required: true,
     minlength: 10,
     maxlength: 64,
+  },
+  winNum: {
+    type: Number,
+    default: 0,
   },
 });
 
