@@ -35,25 +35,42 @@ const GameScreen = ({
 
     socketRef.current.emit("joinLobby", { lobbyId, playerId });
 
-    socketRef.current.on("gameUpdate", (updatedState: GameState) => {
-      setPlayerState(updatedState.playerState);
-      setCurrentWord(updatedState.word);
-    });
-
     socketRef.current.on("gameOver", (result) => {
       setGameOver(result);
-      //fetch to update lobby
+    });
+
+    socketRef.current?.on("gameUpdate", (updatedState) => {
+      setPlayerState(updatedState.playerState);
+      setCurrentWord(updatedState.word);
+      console.log("Updated player state:", updatedState.playerState);
+      console.log("Updated word:", updatedState.word);
     });
 
     return () => {
-      socketRef.current?.off("gameUpdate");
       socketRef.current?.off("gameOver");
       socketRef.current?.disconnect();
     };
   }, [playerId, lobbyId]);
 
+  useEffect(() => {
+    const handleGameUpdate = (updatedState: GameState) => {
+      setPlayerState(updatedState.playerState);
+      setCurrentWord(updatedState.word);
+      console.log("Updated player state:", updatedState.playerState);
+      console.log("Updated word:", updatedState.word);
+    };
+
+    socketRef.current?.on("gameUpdate", handleGameUpdate);
+
+    return () => {
+      socketRef.current?.off("gameUpdate", handleGameUpdate);
+    };
+  }, [playerState]);
+
   const handleGuess = () => {
+    console.log("reached");
     if (socketRef.current && guess) {
+      console.log("Guessing:", guess);
       socketRef.current.emit("makeGuess", {
         lobbyId,
         playerId,
@@ -65,9 +82,11 @@ const GameScreen = ({
   };
 
   const handleRematch = () => {
-    socketRef.current?.emit("rematch", { lobbyId, playerId });
+    setPlayerState(null);
     setGameOver(null);
-    console.log(playerState);
+    setCurrentWord("");
+    socketRef.current?.emit("rematch", { lobbyId, playerId });
+    console.log("rematch:", playerState);
   };
 
   if (!playerState || !currentWord) {

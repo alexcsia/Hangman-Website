@@ -38,10 +38,6 @@ export const handleIoEvents = (httpServer: http.Server) => {
           };
         }
 
-        // if (!lobbies[lobbyId]) {
-        //   newLobbyAndPlayerState(lobbyId, playerId);
-        // }
-
         // emit the initial game state to each player
         const playerState = lobbies[lobbyId].players[playerId];
         socket.emit("gameUpdate", {
@@ -95,7 +91,28 @@ export const handleIoEvents = (httpServer: http.Server) => {
       });
 
       socket.on("rematch", ({ lobbyId, playerId }) => {
-        // newLobbyAndPlayerState(lobbyId, playerId);
+        console.log(`${playerId} clicked REMATCH on ${lobbyId}`);
+        const randomWord = "word";
+        lobbies[lobbyId].word = randomWord;
+
+        lobbies[lobbyId].players[playerId] = {
+          guessedLetters: [],
+          remainingAttempts: 6,
+        };
+
+        const playerState = lobbies[lobbyId].players[playerId];
+        socket.emit("gameUpdate", {
+          word: randomWord,
+          wordLength: lobbies[lobbyId].word.length,
+          playerState: playerState,
+        });
+      });
+
+      socket.on("disconnect", () => {
+        console.log("user disconnected");
+      });
+      //TODO: refactor so this is usable + use word API
+      const newLobbyAndPlayerState = (lobbyId: string, playerId: string) => {
         const randomWord = "word";
         lobbies[lobbyId] = {
           word: randomWord,
@@ -113,11 +130,7 @@ export const handleIoEvents = (httpServer: http.Server) => {
           wordLength: lobbies[lobbyId].word.length,
           playerState: playerState,
         });
-      });
-
-      socket.on("disconnect", () => {
-        console.log("user disconnected");
-      });
+      };
     });
   } catch (error) {
     if (error instanceof Error) {

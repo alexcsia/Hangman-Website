@@ -26,7 +26,6 @@ const UserProfile: React.FC<UserProfileProps> = ({ token }) => {
       if (!userId || !token) return;
 
       try {
-        console.log("fetching with token:", token);
         const res = await fetch(`/api/users/user/${userId}`, {
           headers: {
             Authorization: `Bearer ${token}`,

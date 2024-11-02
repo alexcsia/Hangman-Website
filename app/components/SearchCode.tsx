@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 
 interface SearchLobbyProps {
   token: string | null;
@@ -9,8 +8,6 @@ interface SearchLobbyProps {
 const SearchLobby: React.FC<SearchLobbyProps> = ({ token }) => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [lobbyCode, setLobbyCode] = useState<string>("");
-
-  const router = useRouter();
 
   useEffect(() => {
     if (token === null) {
