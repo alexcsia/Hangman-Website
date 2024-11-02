@@ -1,5 +1,4 @@
-#stage 1: build 
-FROM node:18 AS build
+FROM node:18.17.0-alpine
 
 WORKDIR /app
 
@@ -10,15 +9,6 @@ RUN npm install
 COPY . .
 
 RUN npm run build
-#stage 2: run in production
-
-FROM node:18
-
-WORKDIR /app
-
-COPY --from=build /app ./
-
-RUN npm install 
 
 EXPOSE 3000
 
