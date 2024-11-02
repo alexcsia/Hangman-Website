@@ -13,8 +13,6 @@ const UserProfile: React.FC<UserProfileProps> = ({ token }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const { userId } = useParams();
 
-  console.log("aici", token);
-
   useEffect(() => {
     if (token === null) {
       setError("Please log in first");

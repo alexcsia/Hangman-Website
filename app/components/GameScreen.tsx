@@ -42,6 +42,7 @@ const GameScreen = ({
 
     socketRef.current.on("gameOver", (result) => {
       setGameOver(result);
+      //fetch to update lobby
     });
 
     return () => {
@@ -52,8 +53,6 @@ const GameScreen = ({
   }, [playerId, lobbyId]);
 
   const handleGuess = () => {
-    console.log(lobbyId);
-    console.log(playerId);
     if (socketRef.current && guess) {
       socketRef.current.emit("makeGuess", {
         lobbyId,
@@ -63,6 +62,12 @@ const GameScreen = ({
       });
     }
     setGuess("");
+  };
+
+  const handleRematch = () => {
+    socketRef.current?.emit("rematch", { lobbyId, playerId });
+    setGameOver(null);
+    console.log(playerState);
   };
 
   if (!playerState || !currentWord) {
@@ -75,7 +80,12 @@ const GameScreen = ({
         Hangman Game
       </h1>
       {gameOver ? (
-        <p className="text-2xl font-semibold text-slate-600 mb-3">{gameOver}</p>
+        <>
+          <p className="text-2xl font-semibold text-slate-600 mb-3">
+            {gameOver}
+          </p>
+          <button onClick={handleRematch}>Rematch</button>
+        </>
       ) : (
         <>
           <p className="font-bold text-3xl text-slate-700 my-20">
