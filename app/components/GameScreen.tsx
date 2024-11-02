@@ -42,8 +42,6 @@ const GameScreen = ({
     socketRef.current?.on("gameUpdate", (updatedState) => {
       setPlayerState(updatedState.playerState);
       setCurrentWord(updatedState.word);
-      console.log("Updated player state:", updatedState.playerState);
-      console.log("Updated word:", updatedState.word);
     });
 
     return () => {
@@ -52,23 +50,7 @@ const GameScreen = ({
     };
   }, [playerId, lobbyId]);
 
-  useEffect(() => {
-    const handleGameUpdate = (updatedState: GameState) => {
-      setPlayerState(updatedState.playerState);
-      setCurrentWord(updatedState.word);
-      console.log("Updated player state:", updatedState.playerState);
-      console.log("Updated word:", updatedState.word);
-    };
-
-    socketRef.current?.on("gameUpdate", handleGameUpdate);
-
-    return () => {
-      socketRef.current?.off("gameUpdate", handleGameUpdate);
-    };
-  }, [playerState]);
-
   const handleGuess = () => {
-    console.log("reached");
     if (socketRef.current && guess) {
       console.log("Guessing:", guess);
       socketRef.current.emit("makeGuess", {
@@ -86,7 +68,6 @@ const GameScreen = ({
     setGameOver(null);
     setCurrentWord("");
     socketRef.current?.emit("rematch", { lobbyId, playerId });
-    console.log("rematch:", playerState);
   };
 
   if (!playerState || !currentWord) {
