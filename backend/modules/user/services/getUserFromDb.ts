@@ -8,14 +8,18 @@ export const getUserFromDb = async (userId: string) => {
   }
   try {
     const userData = await User.findOne({ _id: userId }).select(
-      "email username"
+      "email username winNum"
     );
 
     if (!userData) {
       throw new Error("User not found");
     }
     const sanitizedUsername = validator.escape(userData.username);
-    return { email: userData.email, username: sanitizedUsername };
+    return {
+      email: userData.email,
+      username: sanitizedUsername,
+      winNum: userData.winNum,
+    };
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(error.message);

@@ -63,6 +63,10 @@ const UserProfile: React.FC<UserProfileProps> = ({ token }) => {
         <label className="text-lg text-gray-800">
           Email: <span className="font-semibold">{userData?.email}</span>
         </label>
+        <label className="text-lg text-gray-800">
+          Wins:
+          <span className="font-semibold">{userData?.winNum.valueOf()}</span>
+        </label>
       </div>
     </>
   );
