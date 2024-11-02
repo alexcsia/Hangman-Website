@@ -111,26 +111,6 @@ export const handleIoEvents = (httpServer: http.Server) => {
       socket.on("disconnect", () => {
         console.log("user disconnected");
       });
-      //TODO: refactor so this is usable + use word API
-      const newLobbyAndPlayerState = (lobbyId: string, playerId: string) => {
-        const randomWord = "word";
-        lobbies[lobbyId] = {
-          word: randomWord,
-          players: {},
-        };
-
-        lobbies[lobbyId].players[playerId] = {
-          guessedLetters: [],
-          remainingAttempts: 6,
-        };
-
-        const playerState = lobbies[lobbyId].players[playerId];
-        socket.emit("gameUpdate", {
-          word: lobbies[lobbyId].word,
-          wordLength: lobbies[lobbyId].word.length,
-          playerState: playerState,
-        });
-      };
     });
   } catch (error) {
     if (error instanceof Error) {
