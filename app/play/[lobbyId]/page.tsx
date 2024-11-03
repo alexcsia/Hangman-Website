@@ -1,9 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 import Chat from "@/app/components/Chat";
 import GameScreen from "@/app/components/GameScreen";
+import { io, Socket } from "socket.io-client";
 
 interface DecodedToken {
   id: string;
@@ -18,6 +19,22 @@ const PlayPage = () => {
   const [username, setUsername] = useState<string>("");
   const searchParams = useSearchParams();
   const code = searchParams.get("code");
+  const socketRef = useRef<Socket | null>(null);
+
+  useEffect(() => {
+    const protocol = window.location.protocol === "https" ? "wss" : "ws";
+    const port = window.location.port ? `:${window.location.port}` : "";
+    const socketUrl = `${protocol}://${window.location.hostname}${port}`;
+
+    socketRef.current = io(socketUrl);
+
+    socketRef.current.emit("joinLobby", { lobbyId, playerId });
+
+    return () => {
+      socketRef.current?.off("joinLobby");
+      socketRef.current?.disconnect();
+    };
+  }, [playerId, lobbyId]);
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
@@ -56,6 +73,7 @@ const PlayPage = () => {
             lobbyId={lobbyId}
             playerId={playerId}
             username={username}
+            socketRef={socketRef}
           ></GameScreen>
         </div>
         <div>
@@ -63,6 +81,7 @@ const PlayPage = () => {
             lobbyId={lobbyId}
             playerId={playerId}
             username={username}
+            socketRef={socketRef}
           ></Chat>
         </div>
       </div>

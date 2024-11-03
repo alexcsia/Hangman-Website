@@ -7,12 +7,17 @@ interface ChatProps {
   lobbyId: string;
   playerId: string;
   username: string;
+  socketRef: React.MutableRefObject<Socket | null>;
 }
 
-const Chat: React.FC<ChatProps> = ({ lobbyId, playerId, username }) => {
+const Chat: React.FC<ChatProps> = ({
+  lobbyId,
+  playerId,
+  username,
+  socketRef,
+}) => {
   const [messages, setMessages] = useState<string[]>([]);
   const [input, setInput] = useState<string>("");
-  const socketRef = useRef<Socket | null>(null);
   const maxMessageSize = 200;
 
   useEffect(() => {
@@ -21,14 +26,7 @@ const Chat: React.FC<ChatProps> = ({ lobbyId, playerId, username }) => {
   }, []);
 
   useEffect(() => {
-    const protocol = window.location.protocol === "https" ? "wss" : "ws";
-    const port = window.location.port ? `:${window.location.port}` : "";
-    const socketUrl = `${protocol}://${window.location.hostname}${port}`;
-
-    socketRef.current = io(socketUrl);
-    socketRef.current.emit("joinLobby", { lobbyId, playerId });
-
-    socketRef.current.on("chat message", ({ msg }) => {
+    socketRef.current?.on("chat message", ({ msg }) => {
       setMessages((prevMessages) => {
         const newMessages = [...prevMessages, msg];
         return newMessages;
@@ -37,7 +35,7 @@ const Chat: React.FC<ChatProps> = ({ lobbyId, playerId, username }) => {
 
     return () => {
       socketRef.current?.off("chat message");
-      socketRef.current?.disconnect();
+      // socketRef.current?.disconnect();
       localStorage.removeItem("chatMessages");
     };
   }, [lobbyId, playerId]);

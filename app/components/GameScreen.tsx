@@ -2,6 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
 import { useRouter } from "next/navigation";
 
+interface GameScreenProps {
+  lobbyId: string;
+  playerId: string;
+  username: string;
+  socketRef: React.MutableRefObject<Socket | null>;
+}
+
 interface PlayerState {
   guessedLetters: string[];
   remainingAttempts: number;
@@ -12,32 +19,20 @@ interface GameState {
   playerState: PlayerState;
 }
 
-const GameScreen = ({
+const GameScreen: React.FC<GameScreenProps> = ({
   lobbyId,
   playerId,
   username,
-}: {
-  lobbyId: string;
-  playerId: string;
-  username: string;
+  socketRef,
 }) => {
   const [playerState, setPlayerState] = useState<PlayerState | null>(null);
   const [guess, setGuess] = useState<string>("");
   const [gameOver, setGameOver] = useState<string | null>(null);
   const [currentWord, setCurrentWord] = useState<string | null>(null);
-  const socketRef = useRef<Socket | null>(null);
   const router = useRouter();
 
   useEffect(() => {
-    const protocol = window.location.protocol === "https" ? "wss" : "ws";
-    const port = window.location.port ? `:${window.location.port}` : "";
-    const socketUrl = `${protocol}://${window.location.hostname}${port}`;
-
-    socketRef.current = io(socketUrl);
-
-    socketRef.current.emit("joinLobby", { lobbyId, playerId });
-
-    socketRef.current.on("gameOver", (result) => {
+    socketRef.current?.on("gameOver", (result) => {
       setGameOver(result);
     });
 
@@ -46,7 +41,7 @@ const GameScreen = ({
       setCurrentWord(updatedState.word);
     });
 
-    socketRef.current.on("matchQuit", () => {
+    socketRef.current?.on("matchQuit", () => {
       socketRef.current?.disconnect();
       router.push("/");
     });
