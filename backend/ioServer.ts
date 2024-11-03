@@ -2,6 +2,7 @@ import next from "next";
 import http from "http";
 import { Server } from "socket.io";
 import addWinToUser from "./modules/user/services/addWinToUser.ts";
+import updateLobbyStatus from "./modules/lobby/services/updateLobbyStatus.ts";
 
 interface PlayerState {
   guessedLetters: string[];
@@ -108,6 +109,12 @@ export const handleIoEvents = (httpServer: http.Server) => {
           wordLength: lobbies[lobbyId].word.length,
           playerState: playerState,
         });
+      });
+
+      socket.on("quit", ({ lobbyId, playerId }) => {
+        console.log(`User ${playerId} is quitting lobby ${lobbyId}`);
+        updateLobbyStatus(lobbyId);
+        io.emit("matchOver");
       });
 
       socket.on("disconnect", () => {

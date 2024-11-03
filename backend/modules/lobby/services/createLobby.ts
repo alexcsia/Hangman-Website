@@ -13,7 +13,6 @@ export const createLobby = async (userId: mongoose.Types.ObjectId) => {
     const lobby = await Lobby.create({
       players: [userId],
       status: "ongoing",
-      winner: "",
       code: inviteCode,
     });
 

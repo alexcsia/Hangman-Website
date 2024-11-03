@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
+import { useRouter } from "next/navigation";
 
 interface PlayerState {
   guessedLetters: string[];
@@ -25,6 +26,7 @@ const GameScreen = ({
   const [gameOver, setGameOver] = useState<string | null>(null);
   const [currentWord, setCurrentWord] = useState<string | null>(null);
   const socketRef = useRef<Socket | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const protocol = window.location.protocol === "https" ? "wss" : "ws";
@@ -70,6 +72,12 @@ const GameScreen = ({
     socketRef.current?.emit("rematch", { lobbyId, playerId });
   };
 
+  const handleQuit = () => {
+    socketRef.current?.emit("quit", { lobbyId, playerId });
+    socketRef.current?.disconnect();
+    router.push("/");
+  };
+
   if (!playerState || !currentWord) {
     return <div>Loading game...</div>;
   }
@@ -85,6 +93,7 @@ const GameScreen = ({
             {gameOver}
           </p>
           <button onClick={handleRematch}>Rematch</button>
+          <button onClick={handleQuit}>Quit to homepage</button>
         </>
       ) : (
         <>
