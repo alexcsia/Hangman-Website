@@ -46,6 +46,11 @@ const GameScreen = ({
       setCurrentWord(updatedState.word);
     });
 
+    socketRef.current.on("matchQuit", () => {
+      socketRef.current?.disconnect();
+      router.push("/");
+    });
+
     return () => {
       socketRef.current?.off("gameOver");
       socketRef.current?.disconnect();

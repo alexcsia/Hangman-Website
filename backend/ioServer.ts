@@ -114,7 +114,7 @@ export const handleIoEvents = (httpServer: http.Server) => {
       socket.on("quit", ({ lobbyId, playerId }) => {
         console.log(`User ${playerId} is quitting lobby ${lobbyId}`);
         updateLobbyStatus(lobbyId);
-        io.emit("matchOver");
+        io.to(lobbyId).emit("matchQuit");
       });
 
       socket.on("disconnect", () => {
