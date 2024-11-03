@@ -53,7 +53,7 @@ const GameScreen = ({
 
     return () => {
       socketRef.current?.off("gameOver");
-      socketRef.current?.disconnect();
+      socketRef.current?.off("gameUpdate");
     };
   }, [playerId, lobbyId]);
 
@@ -102,6 +102,10 @@ const GameScreen = ({
         </>
       ) : (
         <>
+          {" "}
+          <button className="absolute left-60 " onClick={handleQuit}>
+            Quit to homepage
+          </button>
           <p className="font-bold text-3xl text-slate-700 my-20">
             Word:{" "}
             {currentWord
@@ -111,7 +115,6 @@ const GameScreen = ({
               )
               .join(" ")}
           </p>
-
           <input
             value={guess}
             onChange={(e) => setGuess(e.target.value)}
