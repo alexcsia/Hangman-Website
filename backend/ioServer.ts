@@ -101,19 +101,17 @@ export const handleIoEvents = (httpServer: http.Server) => {
           const randomWord = "word";
           lobbies[lobbyId].word = randomWord;
 
-          Object.keys(lobbies[lobbyId].players).forEach((playerId) => {
-            lobbies[lobbyId].players[playerId] = {
-              guessedLetters: [],
-              remainingAttempts: 6,
-            };
+          const playerState = (lobbies[lobbyId].players[playerId] = {
+            guessedLetters: [],
+            remainingAttempts: 6,
           });
 
           delete rematchCounts[lobbyId];
 
-          io.to(lobbyId).emit("rematch", {
+          io.to(lobbyId).emit("gameUpdate", {
             word: randomWord,
             wordLength: randomWord.length,
-            playerStates: lobbies[lobbyId].players,
+            playerState: playerState,
           });
         }
       });
