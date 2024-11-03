@@ -15,6 +15,7 @@ interface GameState {
 }
 
 const lobbies: Record<string, GameState> = {};
+const rematchCounts: Record<string, Set<string>> = {};
 
 export const handleIoEvents = (httpServer: http.Server) => {
   try {
@@ -83,32 +84,38 @@ export const handleIoEvents = (httpServer: http.Server) => {
             return;
           }
 
-          const allPlayersLost = Object.values(lobby.players).every(
-            (player) => player.remainingAttempts === 0
-          );
-
-          if (allPlayersLost) {
-            io.to(lobbyId).emit("gameOver", "Game over! Both players lost.");
+          if (playerState.remainingAttempts <= 0) {
+            io.to(lobbyId).emit("gameOver", `${username} is out of tries!`);
           }
         }
       });
 
       socket.on("rematch", ({ lobbyId, playerId }) => {
-        console.log(`${playerId} clicked REMATCH on ${lobbyId}`);
-        const randomWord = "word";
-        lobbies[lobbyId].word = randomWord;
+        if (!rematchCounts[lobbyId]) {
+          rematchCounts[lobbyId] = new Set();
+        }
 
-        lobbies[lobbyId].players[playerId] = {
-          guessedLetters: [],
-          remainingAttempts: 6,
-        };
+        rematchCounts[lobbyId].add(playerId);
 
-        const playerState = lobbies[lobbyId].players[playerId];
-        socket.emit("gameUpdate", {
-          word: randomWord,
-          wordLength: lobbies[lobbyId].word.length,
-          playerState: playerState,
-        });
+        if (rematchCounts[lobbyId].size === 2) {
+          const randomWord = "word";
+          lobbies[lobbyId].word = randomWord;
+
+          Object.keys(lobbies[lobbyId].players).forEach((playerId) => {
+            lobbies[lobbyId].players[playerId] = {
+              guessedLetters: [],
+              remainingAttempts: 6,
+            };
+          });
+
+          delete rematchCounts[lobbyId];
+
+          io.to(lobbyId).emit("rematch", {
+            word: randomWord,
+            wordLength: randomWord.length,
+            playerStates: lobbies[lobbyId].players,
+          });
+        }
       });
 
       socket.on("quit", ({ lobbyId, playerId }) => {

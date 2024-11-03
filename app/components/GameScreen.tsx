@@ -51,6 +51,12 @@ const GameScreen = ({
       router.push("/");
     });
 
+    socketRef.current.on("rematch", (rematchState) => {
+      const currentPlayerState = rematchState.playerStates[playerId];
+      setPlayerState(currentPlayerState);
+      setCurrentWord(rematchState.word);
+    });
+
     return () => {
       socketRef.current?.off("gameOver");
       socketRef.current?.disconnect();
