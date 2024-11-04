@@ -12,6 +12,7 @@ export const authenticateUser = async (req: Request, res: Response) => {
       sameSite: "strict",
       maxAge: 60 * 60 * 1000,
     });
+    return res.status(200).json({ message: "Login successful" });
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error("Error authenticating user:", error.message);
