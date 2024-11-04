@@ -1,48 +1,38 @@
-import React from "react";
-import { jwtDecode } from "jwt-decode";
-import { useState } from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-interface ProfileBtnProps {
-  token: string;
-}
-
-interface DecodedToken {
-  id: string;
-  email: string;
-  username: string;
-}
-
-const ProfileBtn: React.FC<ProfileBtnProps> = ({ token }) => {
-  const [errorMessage, setErrorMessage] = useState<string | null>("");
+const ProfileButton = () => {
   const router = useRouter();
+  const [error, setError] = useState("");
 
-  const handleClick = () => {
+  const handleProfileClick = async () => {
     try {
-      const decodedToken: DecodedToken = jwtDecode(token);
-      router.push(`/users/profile/${decodedToken.id}`);
+      const res = await fetch("/api/userInfo", {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch user profile");
+      }
+
+      const userData = await res.json();
+      const userId = userData.id;
+
+      router.push(`/users/profile/${userId}`);
     } catch (error) {
-      console.error("Invalid token:", error);
-      sessionStorage.removeItem("token");
-      setErrorMessage("Please log in first");
+      console.error("Error fetching profile:", error);
+      setError("Failed to load profile.");
     }
   };
 
   return (
     <>
-      <button
-        className="block mx-4 p-1 font-semibold text-md text-white rounded-md px-6"
-        onClick={handleClick}
-      >
-        Profile
-      </button>
-      {errorMessage && (
-        <div>
-          <label className="text-red-500">{errorMessage}</label>
-        </div>
-      )}
+      <button onClick={handleProfileClick}>Profile</button>
+      {error && <p>{error}</p>}
     </>
   );
 };
 
-export default ProfileBtn;
+export default ProfileButton;

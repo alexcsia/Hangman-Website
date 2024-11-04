@@ -1,35 +1,27 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { IUser } from "../../backend/modules/models/User";
+import { useRouter } from "next/navigation";
 
-interface UserProfileProps {
-  token: string | null;
+interface userData {
+  username: string;
+  email: string;
+  winNum: number;
 }
-//
-const UserProfile: React.FC<UserProfileProps> = ({ token }) => {
-  const [userData, setUserData] = useState<IUser | null>(null);
-  const [error, setError] = useState<string>("");
+
+const UserProfile = () => {
+  const [userData, setUserData] = useState<userData>();
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState<boolean>(true);
+  const router = useRouter();
   const { userId } = useParams();
 
   useEffect(() => {
-    if (token === null) {
-      setError("Please log in first");
-      setLoading(false);
-      return;
-    }
-  }, [token]);
-
-  useEffect(() => {
     const fetchUserProfile = async () => {
-      if (!userId || !token) return;
-
       try {
         const res = await fetch(`/api/users/user/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          method: "GET",
+          credentials: "include",
         });
 
         if (!res.ok) {
@@ -37,11 +29,12 @@ const UserProfile: React.FC<UserProfileProps> = ({ token }) => {
         }
 
         const data = await res.json();
+        console.log("data received:", data);
         setUserData(data);
       } catch (error: unknown) {
         if (error instanceof Error) {
-          console.error(error);
           setError(error.message);
+          router.push("/users/login");
         }
       } finally {
         setLoading(false);
@@ -49,7 +42,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ token }) => {
     };
 
     fetchUserProfile();
-  }, [token, userId]);
+  }, [router]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;

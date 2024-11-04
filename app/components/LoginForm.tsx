@@ -13,7 +13,7 @@ const LoginForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    console.log("reached");
     try {
       const response = await fetch("/api/auth/login", {
         method: "POST",
@@ -31,6 +31,7 @@ const LoginForm: React.FC = () => {
         setIsSuccessful(true);
         setErrorMessage("");
       }
+      console.log(isSuccessful);
 
       setEmail("");
       setPassword("");
