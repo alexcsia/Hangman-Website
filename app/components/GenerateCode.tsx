@@ -4,7 +4,7 @@ import { useState } from "react";
 
 const GenerateCode = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [code, setCode] = useState<string>("");
+  // const [code, setCode] = useState<string>("");
 
   const handleClick = async () => {
     try {
@@ -22,7 +22,7 @@ const GenerateCode = () => {
 
         window.location.href = data.redirectUrl;
 
-        setCode(data.code);
+        // setCode(data.code);
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -38,9 +38,6 @@ const GenerateCode = () => {
       <button className="px-2" onClick={handleClick}>
         Create new lobby
       </button>
-      {/* <label className="font-semibold text-slate-700 text-xl pt-4">
-        {code ? code : "xxxx-xxxx"}
-      </label> */}
       {errorMessage && (
         <div>
           <label className="text-red-500">{errorMessage}</label>

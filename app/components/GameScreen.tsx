@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { io, Socket } from "socket.io-client";
+import React, { useState, useEffect } from "react";
+import { Socket } from "socket.io-client";
 import { useRouter } from "next/navigation";
 
 interface GameScreenProps {
@@ -12,11 +12,6 @@ interface GameScreenProps {
 interface PlayerState {
   guessedLetters: string[];
   remainingAttempts: number;
-}
-
-interface GameState {
-  word: string;
-  playerState: PlayerState;
 }
 
 const GameScreen: React.FC<GameScreenProps> = ({
@@ -50,7 +45,7 @@ const GameScreen: React.FC<GameScreenProps> = ({
       socketRef.current?.off("gameOver");
       socketRef.current?.off("gameUpdate");
     };
-  }, [playerId, lobbyId]);
+  }, [playerId, lobbyId, router, socketRef]);
 
   const handleGuess = () => {
     if (socketRef.current && guess) {

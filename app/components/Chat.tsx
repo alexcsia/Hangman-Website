@@ -1,6 +1,6 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
-import { io, Socket } from "socket.io-client";
+import React, { useState, useEffect } from "react";
+import { Socket } from "socket.io-client";
 import DOMPurify from "dompurify";
 
 interface ChatProps {
@@ -35,10 +35,9 @@ const Chat: React.FC<ChatProps> = ({
 
     return () => {
       socketRef.current?.off("chat message");
-      // socketRef.current?.disconnect();
       localStorage.removeItem("chatMessages");
     };
-  }, [lobbyId, playerId]);
+  }, [lobbyId, playerId, socketRef]);
 
   useEffect(() => {
     localStorage.setItem("chatMessages", JSON.stringify(messages));

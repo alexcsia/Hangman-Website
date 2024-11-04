@@ -42,7 +42,7 @@ const UserProfile = () => {
     };
 
     fetchUserProfile();
-  }, [router]);
+  }, [router, userId]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
