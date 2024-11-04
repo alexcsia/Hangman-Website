@@ -2,6 +2,7 @@ import http from "http";
 import { Server } from "socket.io";
 import addWinToUser from "./modules/user/services/addWinToUser.ts";
 import updateLobbyStatus from "./modules/lobby/services/updateLobbyStatus.ts";
+import { selectRandomWord } from "./modules/lobby/services/selectRandomWord.ts";
 
 interface PlayerState {
   guessedLetters: string[];
@@ -21,12 +22,12 @@ export const handleIoEvents = (httpServer: http.Server) => {
     const io = new Server(httpServer);
 
     io.on("connection", (socket) => {
-      socket.on("joinLobby", ({ lobbyId, playerId }) => {
+      socket.on("joinLobby", async ({ lobbyId, playerId }) => {
         socket.join(lobbyId);
         console.log(`Player ${playerId} joined lobby: ${lobbyId}`);
 
         if (!lobbies[lobbyId]) {
-          const randomWord = "example";
+          const randomWord = (await selectRandomWord()) || "example";
           lobbies[lobbyId] = {
             word: randomWord,
             players: {},
@@ -89,7 +90,7 @@ export const handleIoEvents = (httpServer: http.Server) => {
         }
       });
 
-      socket.on("rematch", ({ lobbyId, playerId }) => {
+      socket.on("rematch", async ({ lobbyId, playerId }) => {
         if (!rematchCounts[lobbyId]) {
           rematchCounts[lobbyId] = new Set();
         }
@@ -97,7 +98,7 @@ export const handleIoEvents = (httpServer: http.Server) => {
         rematchCounts[lobbyId].add(playerId);
 
         if (rematchCounts[lobbyId].size === 2) {
-          const randomWord = "word";
+          const randomWord = (await selectRandomWord()) || "word";
           lobbies[lobbyId].word = randomWord;
 
           const playerState = (lobbies[lobbyId].players[playerId] = {
