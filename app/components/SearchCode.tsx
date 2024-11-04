@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const SearchLobby = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -13,6 +13,9 @@ const SearchLobby = () => {
       const response = await fetch("/api/play/find", {
         method: "POST",
         credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ lobbyCode }),
       });
 

@@ -1,16 +1,9 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { jwtDecode } from "jwt-decode";
 import Chat from "@/app/components/Chat";
 import GameScreen from "@/app/components/GameScreen";
 import { io, Socket } from "socket.io-client";
-
-interface DecodedToken {
-  id: string;
-  email: string;
-  username: string;
-}
 
 const PlayPage = () => {
   const router = useRouter();
@@ -37,23 +30,25 @@ const PlayPage = () => {
   }, [playerId, lobbyId]);
 
   useEffect(() => {
-    const token = sessionStorage.getItem("token");
+    const checkAuthStatus = async () => {
+      try {
+        const response = await fetch("/api/userInfo");
+        if (!response.ok) {
+          throw new Error("Unauthorized access");
+        }
 
-    if (!token) {
-      router.push("/users/login");
-      return;
-    }
+        const userData = await response.json();
+        setPlayerId(userData.id);
+        setUsername(userData.username);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          router.push("/users/login");
+        }
+      }
+    };
 
-    try {
-      const decoded: DecodedToken = jwtDecode(token);
-      setPlayerId(decoded.id);
-      setUsername(decoded.username);
-    } catch (error) {
-      console.error("Invalid token:", error);
-      sessionStorage.removeItem("token");
-      router.push("/users/login");
-    }
-  }, [router, code]);
+    checkAuthStatus();
+  }, [router]);
 
   if (!lobbyId || typeof lobbyId !== "string" || !playerId || !username) {
     return <div>Loading...</div>;
