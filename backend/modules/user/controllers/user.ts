@@ -1,15 +1,13 @@
 import { Response } from "express";
 import { IAuthenticatedRequest } from "../../../loaders/middleware/authenticateJWT.ts";
 import { getUserFromDb } from "../services/getUserFromDb.ts";
-//
+
 export const userProfile = async (
   req: IAuthenticatedRequest,
   res: Response
 ) => {
   const userIdFromParams = req.params.userId;
   const userIdFromToken = req.user?.id;
-
-  console.log("received id:", userIdFromToken);
 
   if (userIdFromParams !== userIdFromToken) {
     return res
