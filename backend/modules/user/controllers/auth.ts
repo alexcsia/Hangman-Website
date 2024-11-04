@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { loginUser } from "../services/userAuthentication.ts";
-import { IAuthenticatedRequest } from "../../../loaders/middleware/authenticateJWT.ts";
 
 export const authenticateUser = async (req: Request, res: Response) => {
   try {

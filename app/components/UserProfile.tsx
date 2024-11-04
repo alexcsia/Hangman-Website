@@ -29,7 +29,6 @@ const UserProfile = () => {
         }
 
         const data = await res.json();
-        console.log("data received:", data);
         setUserData(data);
       } catch (error: unknown) {
         if (error instanceof Error) {

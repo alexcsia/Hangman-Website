@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import ProfileBtn from "./ProfileBtn";
+import LogoutBtn from "./LogoutBtn";
 
 const HomePageMenu = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -59,7 +60,13 @@ const HomePageMenu = () => {
       </div>
 
       <div className="flex flex-col space-y-4">
-        {isLoggedIn && <ProfileBtn userId={userId} />}
+        {isLoggedIn && (
+          <>
+            {" "}
+            <ProfileBtn userId={userId} /> <LogoutBtn />{" "}
+          </>
+        )}
+
         <Link href="/about" className="ml-2 custom-link p-3 w-20">
           About
         </Link>
