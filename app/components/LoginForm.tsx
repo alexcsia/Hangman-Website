@@ -21,8 +21,6 @@ const LoginForm: React.FC = () => {
         body: JSON.stringify({ email, password }),
       });
 
-      console.log(response);
-
       if (!response.ok) {
         setIsSuccessful(false);
 
@@ -31,15 +29,11 @@ const LoginForm: React.FC = () => {
         return;
       } else {
         setIsSuccessful(true);
-
-        const data = await response.json();
-        const token = data.token;
-        sessionStorage.setItem("token", token);
+        setErrorMessage("");
       }
 
       setEmail("");
       setPassword("");
-      setErrorMessage("");
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error("Authentication error", error.message);

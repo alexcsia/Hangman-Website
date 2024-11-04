@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { IAuthenticatedRequest } from "../../../loaders/middleware/authenticateJWT.ts";
 import { getUserFromDb } from "../services/getUserFromDb.ts";
-
+//
 export const userProfile = async (
   req: IAuthenticatedRequest,
   res: Response

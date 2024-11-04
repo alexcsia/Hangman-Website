@@ -6,7 +6,7 @@ import { IUser } from "../../backend/modules/models/User";
 interface UserProfileProps {
   token: string | null;
 }
-
+//
 const UserProfile: React.FC<UserProfileProps> = ({ token }) => {
   const [userData, setUserData] = useState<IUser | null>(null);
   const [error, setError] = useState<string>("");

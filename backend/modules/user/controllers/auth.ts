@@ -5,8 +5,13 @@ export const authenticateUser = async (req: Request, res: Response) => {
   try {
     const userData = req.body;
     const token = await loginUser(userData.password, userData.email);
-    console.log(token);
-    return res.status(200).json({ token });
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 60 * 60 * 1000,
+    });
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error("Error authenticating user:", error.message);

@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 
-const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
+const JWT_SECRET = process.env.JWT_SECRET || "secret_key";
 
 interface IJwtPayload {
   id: string;
@@ -9,7 +9,7 @@ interface IJwtPayload {
   username: string;
 }
 
-//adding optional user property
+// adding optional user property
 export interface IAuthenticatedRequest extends Request {
   user?: IJwtPayload;
 }
@@ -19,7 +19,7 @@ export const authenticateJWT = (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.headers.authorization?.split(" ")[1];
+  const token = req.cookies.token;
 
   if (!token) {
     return res.status(401).json({ message: "Please log in to continue" });
