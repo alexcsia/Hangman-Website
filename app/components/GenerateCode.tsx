@@ -1,29 +1,16 @@
 "use client";
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
-interface GenerateCodeProps {
-  token: string | null;
-}
-
-const GenerateCode: React.FC<GenerateCodeProps> = ({ token }) => {
+const GenerateCode = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [code, setCode] = useState<string>("");
-
-  useEffect(() => {
-    if (token === null) {
-      setErrorMessage("Please log in first");
-      return;
-    }
-  }, [token]);
 
   const handleClick = async () => {
     try {
       const response = await fetch("/api/play/generate", {
         method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        credentials: "include",
       });
 
       if (!response.ok) {
@@ -49,11 +36,11 @@ const GenerateCode: React.FC<GenerateCodeProps> = ({ token }) => {
       <header className="format-header">or</header>
       <br></br>
       <button className="px-2" onClick={handleClick}>
-        Create new invite code
+        Create new lobby
       </button>
-      <label className="font-semibold text-slate-700 text-xl pt-4">
+      {/* <label className="font-semibold text-slate-700 text-xl pt-4">
         {code ? code : "xxxx-xxxx"}
-      </label>
+      </label> */}
       {errorMessage && (
         <div>
           <label className="text-red-500">{errorMessage}</label>

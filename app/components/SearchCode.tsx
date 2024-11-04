@@ -2,19 +2,9 @@
 import React from "react";
 import { useState, useEffect } from "react";
 
-interface SearchLobbyProps {
-  token: string | null;
-}
-const SearchLobby: React.FC<SearchLobbyProps> = ({ token }) => {
+const SearchLobby = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [lobbyCode, setLobbyCode] = useState<string>("");
-
-  useEffect(() => {
-    if (token === null) {
-      setErrorMessage("Please log in first");
-      return;
-    }
-  }, [token]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,10 +12,7 @@ const SearchLobby: React.FC<SearchLobbyProps> = ({ token }) => {
     try {
       const response = await fetch("/api/play/find", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        credentials: "include",
         body: JSON.stringify({ lobbyCode }),
       });
 

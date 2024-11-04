@@ -1,43 +1,28 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import GenerateCode from "@/app/components/GenerateCode";
 import SearchLobby from "@/app/components/SearchCode";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { jwtDecode } from "jwt-decode";
 import Link from "next/link";
 
-interface DecodedToken {
-  id: string;
-  username: string;
-  exp: number;
-  email: string;
-}
-
 const ConnectPage = () => {
-  const [token, setToken] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
-    const token = sessionStorage.getItem("token");
-    if (!token) {
-      router.push("/users/login");
-      return;
-    }
-
-    try {
-      const decoded: DecodedToken = jwtDecode(token);
-      const isTokenExpired = decoded.exp * 1000 < Date.now();
-
-      if (isTokenExpired) {
-        sessionStorage.removeItem("token");
+    const checkAuthStatus = async () => {
+      try {
+        const response = await fetch("/api/userInfo");
+        if (!response.ok) {
+          throw new Error("Unauthorized access");
+        }
+      } catch (error) {
+        console.error("Error checking authentication status:", error);
         router.push("/users/login");
-      } else {
-        setToken(token);
       }
-    } catch {
-      router.push("/users/login");
-    }
+    };
+
+    checkAuthStatus();
   }, [router]);
 
   return (
@@ -47,8 +32,8 @@ const ConnectPage = () => {
           Home
         </Link>
       </div>
-      <SearchLobby token={token || ""}></SearchLobby>
-      <GenerateCode token={token || ""}></GenerateCode>
+      <SearchLobby></SearchLobby>
+      <GenerateCode></GenerateCode>
     </main>
   );
 };
