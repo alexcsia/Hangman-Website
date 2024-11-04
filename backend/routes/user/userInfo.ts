@@ -4,5 +4,5 @@ import { authenticateJWT } from "../../loaders/middleware/authenticateJWT.ts";
 
 const router = express.Router();
 
-router.get("/user/userInfo", authenticateJWT, getUserInfo);
+router.get("/userInfo", authenticateJWT, getUserInfo);
 export default router;

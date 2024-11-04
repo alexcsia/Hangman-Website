@@ -10,7 +10,7 @@ export const applyRoutes = (server: express.Application, handle: Function) => {
   server.use("/api/registration", registerRoutes);
   server.use("/api/users", userRoutes);
   server.use("/api/play", playRoutes);
-  server.use("/api/users", userInfo);
+  server.use("/api", userInfo);
 
   server.all("*", (req, res) => {
     return handle(req, res);
