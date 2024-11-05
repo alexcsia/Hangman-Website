@@ -2,12 +2,14 @@ import { User } from "../../models/User.ts";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-export const loginUser = async (password: string, email: string) => {
-  const JWT_SECRET = process.env.JWT_SECRET;
+const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET;
 
-  if (!JWT_SECRET) {
-    throw new Error("JWT_SECRET is not defined");
-  }
+export const loginUser = async (password: string, email: string) => {
+  if (!JWT_SECRET) throw new Error("JWT_SECRET is not defined");
+
+  if (!REFRESH_TOKEN_SECRET)
+    throw new Error("REFRESH_TOKEN_SECRET is not defined");
 
   try {
     const user = await User.findOne({ email });
@@ -20,15 +22,53 @@ export const loginUser = async (password: string, email: string) => {
       throw new Error("Invalid email or password");
     }
 
-    const token = jwt.sign(
+    const accessToken = jwt.sign(
       { id: user._id, email: user.email, username: user.username },
       JWT_SECRET,
       {
-        expiresIn: "2h",
+        expiresIn: "15m",
       }
     );
 
-    return token;
+    const refreshToken = jwt.sign(
+      { id: user._id, email: user.email, username: user.username },
+      REFRESH_TOKEN_SECRET,
+      { expiresIn: "3d" }
+    );
+
+    return { accessToken: accessToken, refreshToken: refreshToken };
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+  }
+};
+
+export const generateAccessToken = async (
+  refreshToken: string,
+  userId: string
+) => {
+  try {
+    if (!JWT_SECRET) throw new Error("JWT_SECRET is not defined");
+
+    if (!REFRESH_TOKEN_SECRET)
+      throw new Error("REFRESH_TOKEN_SECRET is not defined");
+
+    const user = await User.findById(userId);
+    if (!user) throw new Error("Could not find user");
+
+    const verifiedToken = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET);
+    if (!verifiedToken) throw new Error("Refresh token is invalid");
+
+    const accessToken = jwt.sign(
+      { id: user._id, email: user.email, username: user.username },
+      JWT_SECRET,
+      {
+        expiresIn: "15m",
+      }
+    );
+
+    return accessToken;
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(error.message);
