@@ -14,6 +14,11 @@ interface PlayerState {
   remainingAttempts: number;
 }
 
+interface GameUpdate {
+  word: string | null;
+  playerState: PlayerState;
+}
+
 const GameScreen: React.FC<GameScreenProps> = ({
   lobbyId,
   playerId,
@@ -27,23 +32,30 @@ const GameScreen: React.FC<GameScreenProps> = ({
   const router = useRouter();
 
   useEffect(() => {
-    socketRef.current?.on("gameOver", (result) => {
-      setGameOver(result);
-    });
+    const socket = socketRef.current;
 
-    socketRef.current?.on("gameUpdate", (updatedState) => {
+    const handleGameOver = (result: string) => {
+      setGameOver(result);
+    };
+
+    const handleGameUpdate = (updatedState: GameUpdate) => {
       setPlayerState(updatedState.playerState);
       setCurrentWord(updatedState.word);
-    });
+    };
 
-    socketRef.current?.on("matchQuit", () => {
-      socketRef.current?.disconnect();
+    const handleMatchQuit = () => {
+      socket?.disconnect();
       router.push("/");
-    });
+    };
+
+    socket?.on("gameOver", handleGameOver);
+    socket?.on("gameUpdate", handleGameUpdate);
+    socket?.on("matchQuit", handleMatchQuit);
 
     return () => {
-      socketRef.current?.off("gameOver");
-      socketRef.current?.off("gameUpdate");
+      socket?.off("gameOver", handleGameOver);
+      socket?.off("gameUpdate", handleGameUpdate);
+      socket?.off("matchQuit", handleMatchQuit);
     };
   }, [playerId, lobbyId, router, socketRef]);
 

@@ -43,6 +43,7 @@ export const handleIoEvents = (httpServer: http.Server) => {
 
         // emit the initial game state to each player
         const playerState = lobbies[lobbyId].players[playerId];
+        console.log(playerState);
         socket.emit("gameUpdate", {
           word: lobbies[lobbyId].word,
           wordLength: lobbies[lobbyId].word.length,

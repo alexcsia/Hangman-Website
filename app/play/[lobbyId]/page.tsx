@@ -13,21 +13,27 @@ const PlayPage = () => {
   const searchParams = useSearchParams();
   const code = searchParams.get("code");
   const socketRef = useRef<Socket | null>(null);
+  const [isSocketReady, setIsSocketReady] = useState<boolean>(false);
 
-  useEffect(() => {
-    const protocol = window.location.protocol === "https" ? "wss" : "ws";
-    const port = window.location.port ? `:${window.location.port}` : "";
-    const socketUrl = `${protocol}://${window.location.hostname}${port}`;
+  const initializeSocket = () => {
+    if (playerId && lobbyId) {
+      const protocol = window.location.protocol === "https" ? "wss" : "ws";
+      const port = window.location.port ? `:${window.location.port}` : "";
+      const socketUrl = `${protocol}://${window.location.hostname}${port}`;
 
-    socketRef.current = io(socketUrl);
+      socketRef.current = io(socketUrl);
+      socketRef.current.on("connect", () => {
+        socketRef.current?.emit("joinLobby", { lobbyId, playerId });
+        setIsSocketReady(true);
+      });
 
-    socketRef.current.emit("joinLobby", { lobbyId, playerId });
-
-    return () => {
-      socketRef.current?.off("joinLobby");
-      socketRef.current?.disconnect();
-    };
-  }, [playerId, lobbyId]);
+      return () => {
+        socketRef.current?.off("joinLobby");
+        socketRef.current?.disconnect();
+        socketRef.current = null;
+      };
+    }
+  };
 
   useEffect(() => {
     const checkAuthStatus = async () => {
@@ -50,8 +56,17 @@ const PlayPage = () => {
     checkAuthStatus();
   }, [router]);
 
+  useEffect(() => {
+    const cleanupSocket = initializeSocket();
+    return cleanupSocket;
+  }, [playerId, lobbyId]);
+
   if (!lobbyId || typeof lobbyId !== "string" || !playerId || !username) {
     return <div>Loading...</div>;
+  }
+
+  if (!isSocketReady) {
+    return <div>Connecting to game...</div>;
   }
 
   return (

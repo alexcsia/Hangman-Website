@@ -26,15 +26,18 @@ const Chat: React.FC<ChatProps> = ({
   }, []);
 
   useEffect(() => {
-    socketRef.current?.on("chat message", ({ msg }) => {
+    const socket = socketRef.current;
+    const handleMessage = ({ msg }: { msg: string }) => {
       setMessages((prevMessages) => {
         const newMessages = [...prevMessages, msg];
         return newMessages;
       });
-    });
+    };
+
+    socket?.on("chat message", handleMessage);
 
     return () => {
-      socketRef.current?.off("chat message");
+      socket?.off("chat message", handleMessage);
       localStorage.removeItem("chatMessages");
     };
   }, [lobbyId, playerId, socketRef]);
