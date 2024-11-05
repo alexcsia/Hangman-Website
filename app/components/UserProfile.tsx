@@ -25,6 +25,32 @@ const UserProfile = () => {
         });
 
         if (!res.ok) {
+          if (res.status === 401) {
+            const refreshRes = await fetch("/api/auth/refresh", {
+              method: "GET",
+              credentials: "include",
+            });
+
+            if (!refreshRes.ok) {
+              router.push("/users/login");
+              return;
+            }
+
+            const newProfileRes = await fetch(`/api/users/user/${userId}`, {
+              method: "GET",
+              credentials: "include",
+            });
+
+            if (!newProfileRes.ok) {
+              throw new Error(
+                "Failed to fetch user profile after refreshing token"
+              );
+            }
+
+            const data = await newProfileRes.json();
+            setUserData(data);
+            return;
+          }
           throw new Error("Failed to fetch user profile");
         }
 

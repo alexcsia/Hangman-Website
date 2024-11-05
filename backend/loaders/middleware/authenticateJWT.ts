@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
+import isJwtPayloadWithUserData from "../../modules/user/utils/CheckIsJWTPayload.ts";
 
 const JWT_SECRET = process.env.JWT_SECRET || "secret_key";
 
@@ -22,7 +23,7 @@ export const authenticateJWT = (
   const token = req.cookies.accessToken;
 
   if (!token) {
-    return res.status(401).json({ message: "Please log in to continue" });
+    return res.status(401).json({ message: "Could not find access token" });
   }
 
   try {
@@ -51,16 +52,3 @@ export const authenticateJWT = (
     }
   }
 };
-
-//  ensure the token has id email and username
-function isJwtPayloadWithUserData(
-  verifiedToken: unknown
-): verifiedToken is { id: string; email: string; username: string } {
-  return (
-    typeof verifiedToken === "object" &&
-    verifiedToken != null &&
-    "id" in verifiedToken &&
-    "email" in verifiedToken &&
-    "username" in verifiedToken
-  );
-}

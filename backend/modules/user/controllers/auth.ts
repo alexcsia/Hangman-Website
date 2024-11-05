@@ -27,27 +27,19 @@ export const authenticateUser = async (req: Request, res: Response) => {
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error("Error authenticating user:", error.message);
-      return res.status(500).json({
+      return res.status(401).json({
         message: error.message,
       });
     }
   }
 };
 
-export const refreshToken = async (
-  req: IAuthenticatedRequest,
-  res: Response
-) => {
+export const refreshToken = async (req: Request, res: Response) => {
   try {
     const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) return res.sendStatus(401);
 
-    const userId = req.user?.id;
-    if (!userId) {
-      throw new Error("User ID not defined");
-    }
-
-    const newAccessToken = await generateAccessToken(refreshToken, userId);
+    const newAccessToken = await generateAccessToken(refreshToken);
 
     res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
@@ -74,14 +66,12 @@ export const userLogout = async (req: Request, res: Response) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 15 * 60 * 1000,
     });
 
     res.clearCookie("refreshToken", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 3 * 24 * 60 * 60 * 1000,
     });
 
     return res.status(200).json({ message: "Logout successful" });
