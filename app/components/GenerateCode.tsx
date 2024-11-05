@@ -4,7 +4,6 @@ import { useState } from "react";
 
 const GenerateCode = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
-  // const [code, setCode] = useState<string>("");
 
   const handleClick = async () => {
     try {
@@ -21,8 +20,6 @@ const GenerateCode = () => {
         const data = await response.json();
 
         window.location.href = data.redirectUrl;
-
-        // setCode(data.code);
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
