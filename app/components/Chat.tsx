@@ -46,10 +46,12 @@ const Chat: React.FC<ChatProps> = ({
     localStorage.setItem("chatMessages", JSON.stringify(messages));
   }, [messages]);
 
+  const sanitizeMessage = (message: string) => DOMPurify.sanitize(message);
+
   const sendMessage = () => {
     if (input.trim() && socketRef.current) {
-      const sanitizedMsg = DOMPurify.sanitize(input);
-      const sanitizedUsername = DOMPurify.sanitize(username);
+      const sanitizedMsg = sanitizeMessage(input);
+      const sanitizedUsername = sanitizeMessage(username);
       if (sanitizedMsg.length > maxMessageSize) return;
 
       socketRef.current.emit("chat message", {
