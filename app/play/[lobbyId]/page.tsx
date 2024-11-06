@@ -4,6 +4,7 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Chat from "@/app/components/Chat";
 import GameScreen from "@/app/components/GameScreen";
 import { io, Socket } from "socket.io-client";
+import { fetchWithAuth } from "@/app/utils/fetchWithAuth";
 
 const PlayPage = () => {
   const router = useRouter();
@@ -15,9 +16,30 @@ const PlayPage = () => {
   const socketRef = useRef<Socket | null>(null);
   const [isSocketReady, setIsSocketReady] = useState<boolean>(false);
 
-  const initializeSocket = () => {
-    if (playerId && lobbyId) {
-      const protocol = window.location.protocol === "https" ? "wss" : "ws";
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      try {
+        const response = await fetchWithAuth("/api/userInfo");
+        if (!response.ok) {
+          throw new Error("Authentication failed");
+        }
+
+        const userData = await response.json();
+        setPlayerId(userData.id);
+        setUsername(userData.username);
+      } catch {
+        router.push("/users/login");
+      }
+    };
+
+    checkAuthStatus();
+  }, [router]);
+
+  useEffect(() => {
+    if (!playerId || !lobbyId) return;
+
+    const initializeSocket = () => {
+      const protocol = window.location.protocol === "https:" ? "wss" : "ws";
       const port = window.location.port ? `:${window.location.port}` : "";
       const socketUrl = `${protocol}://${window.location.hostname}${port}`;
 
@@ -27,36 +49,16 @@ const PlayPage = () => {
         setIsSocketReady(true);
       });
 
+      socketRef.current.on("disconnect", () => {
+        setIsSocketReady(false);
+      });
+
       return () => {
-        socketRef.current?.off("joinLobby");
         socketRef.current?.disconnect();
         socketRef.current = null;
       };
-    }
-  };
-
-  useEffect(() => {
-    const checkAuthStatus = async () => {
-      try {
-        const response = await fetch("/api/userInfo");
-        if (!response.ok) {
-          throw new Error("Unauthorized access");
-        }
-
-        const userData = await response.json();
-        setPlayerId(userData.id);
-        setUsername(userData.username);
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          router.push("/users/login");
-        }
-      }
     };
 
-    checkAuthStatus();
-  }, [router]);
-
-  useEffect(() => {
     const cleanupSocket = initializeSocket();
     return cleanupSocket;
   }, [playerId, lobbyId]);
@@ -70,32 +72,29 @@ const PlayPage = () => {
   }
 
   return (
-    <>
-      {" "}
-      <div className="flex flex-row items-center justify-center w-auto space-x-10 mx-auto min-h-screen rounded">
-        <div>
-          <p className="font-bold text-xl text-slate-700 my-20">
-            Join code: {code}
-          </p>
-        </div>
-        <div className="flex flex-col rounded bg-slate-300 h-[400px] w-[500px] items-center justify-center">
-          <GameScreen
-            lobbyId={lobbyId}
-            playerId={playerId}
-            username={username}
-            socketRef={socketRef}
-          ></GameScreen>
-        </div>
-        <div>
-          <Chat
-            lobbyId={lobbyId}
-            playerId={playerId}
-            username={username}
-            socketRef={socketRef}
-          ></Chat>
-        </div>
+    <div className="flex flex-row items-center justify-center w-auto space-x-10 mx-auto min-h-screen rounded">
+      <div>
+        <p className="font-bold text-xl text-slate-700 my-20">
+          Join code: {code}
+        </p>
       </div>
-    </>
+      <div className="flex flex-col rounded bg-slate-300 h-[400px] w-[500px] items-center justify-center">
+        <GameScreen
+          lobbyId={lobbyId}
+          playerId={playerId}
+          username={username}
+          socketRef={socketRef}
+        />
+      </div>
+      <div>
+        <Chat
+          lobbyId={lobbyId}
+          playerId={playerId}
+          username={username}
+          socketRef={socketRef}
+        />
+      </div>
+    </div>
   );
 };
 

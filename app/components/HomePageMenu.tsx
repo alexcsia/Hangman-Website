@@ -20,7 +20,7 @@ const HomePageMenu = () => {
         else setIsLoggedIn(false);
       } catch (error: unknown) {
         if (error instanceof Error) {
-          console.error("Error checking authentication status");
+          console.error("Error retrieving user data:", error);
           setIsLoggedIn(false);
         }
       }
