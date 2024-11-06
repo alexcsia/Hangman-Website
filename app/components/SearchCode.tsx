@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { useState } from "react";
+import { fetchWithAuth } from "../utils/fetchWithAuth";
 
 const SearchLobby = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -10,7 +11,7 @@ const SearchLobby = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("/api/play/find", {
+      const response = await fetchWithAuth("/api/play/find", {
         method: "POST",
         credentials: "include",
         headers: {

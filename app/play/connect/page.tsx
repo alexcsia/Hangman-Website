@@ -5,6 +5,7 @@ import SearchLobby from "@/app/components/SearchCode";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { fetchWithAuth } from "@/app/utils/fetchWithAuth";
 
 const ConnectPage = () => {
   const router = useRouter();
@@ -12,13 +13,15 @@ const ConnectPage = () => {
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        const response = await fetch("/api/userInfo");
+        const response = await fetchWithAuth("/api/userInfo");
         if (!response.ok) {
-          throw new Error("Unauthorized access");
+          throw new Error("Authentication failed");
         }
-      } catch (error) {
-        console.error("Error checking authentication status:", error);
-        router.push("/users/login");
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.error("Error retrieving user data:", error);
+          router.push("/users/login");
+        }
       }
     };
 
