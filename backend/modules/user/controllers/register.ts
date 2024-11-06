@@ -1,11 +1,20 @@
 import { Request, Response } from "express";
 import { addUser } from "../services/userRegistration.ts";
+import {
+  validateUsername,
+  validateEmail,
+  validatePassword,
+} from "../utils/validators";
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
-    const userData = req.body;
-    console.log(userData);
-    await addUser(userData);
+    const { username, email, password } = req.body;
+
+    const validatedUsername = validateUsername(username);
+    const validatedEmail = await validateEmail(email);
+    const validatedPassword = validatePassword(password);
+
+    await addUser(validatedUsername, validatedEmail, validatedPassword);
     return res.status(201).json("User registered successfully");
   } catch (error: unknown) {
     if (error instanceof Error) {
