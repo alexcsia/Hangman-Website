@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import ProfileBtn from "./ProfileBtn";
 import LogoutBtn from "./LogoutBtn";
+import { fetchWithAuth } from "../utils/fetchWithAuth";
 
 const HomePageMenu = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -11,19 +12,17 @@ const HomePageMenu = () => {
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        const response = await fetch("/api/userInfo");
-        if (response.ok) {
-          const userData = await response.json();
-          setUserId(userData.id);
-          if (userData) {
-            setIsLoggedIn(true);
-          }
-        } else {
+        const response = await fetchWithAuth("/api/userInfo");
+        if (!response.ok) throw new Error("Authentication failed");
+        const userData = await response.json();
+        setUserId(userData.id);
+        if (userData) setIsLoggedIn(true);
+        else setIsLoggedIn(false);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.error("Error checking authentication status");
           setIsLoggedIn(false);
         }
-      } catch (error) {
-        console.error("Error checking authentication status:", error);
-        setIsLoggedIn(false);
       }
     };
 

@@ -1,27 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { fetchWithAuth } from "../utils/fetchWithAuth";
 
 interface UserData {
   username: string;
   email: string;
   winNum: number;
 }
-
-const fetchWithAuth = async (url: string): Promise<Response> => {
-  let res = await fetch(url, { method: "GET", credentials: "include" });
-  if (res.status === 401) {
-    const refreshRes = await fetch("/api/auth/refresh", {
-      credentials: "include",
-    });
-    if (refreshRes.ok) {
-      res = await fetch(url, { method: "GET", credentials: "include" });
-    } else {
-      throw new Error("Unauthorized. Please log in again.");
-    }
-  }
-  return res;
-};
 
 const UserProfile = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
