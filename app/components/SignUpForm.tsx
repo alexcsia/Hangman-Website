@@ -76,7 +76,7 @@ const SignUpForm: React.FC = () => {
           <label className="text-left w-full my-2 text-slate-700">Email</label>
           <input
             type="email"
-            placeholder="Username"
+            placeholder="Email"
             className="border border-gray-300 rounded px-1"
             onChange={(e) => setEmail(e.target.value)}
             maxLength={254}
