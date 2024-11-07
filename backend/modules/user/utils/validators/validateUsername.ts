@@ -10,3 +10,8 @@ export const validateUsername = (username: string): string => {
   }
   return username;
 };
+
+export const escapeUsername = (username: string): string => {
+  const escapedUsername = validator.escape(username);
+  return escapedUsername;
+};

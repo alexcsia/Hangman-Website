@@ -1,8 +1,9 @@
 import { Response } from "express";
 import { IAuthenticatedRequest } from "../../../loaders/middleware/authenticateJWT.ts";
 import { getUserFromDb } from "../services/getUserFromDb.ts";
+import { escapeUsername } from "../utils/validators/validateUsername.ts";
 
-export const userProfile = async (
+export const getUserProfile = async (
   req: IAuthenticatedRequest,
   res: Response
 ) => {
@@ -17,8 +18,16 @@ export const userProfile = async (
 
   try {
     const userData = await getUserFromDb(userIdFromParams);
-    console.log("received data:", userData);
-    return res.status(200).json(userData);
+
+    let escapedUsername = "";
+    if (userData?.username) {
+      escapedUsername = escapeUsername(userData.username);
+    }
+
+    return res.status(200).json({
+      ...userData,
+      escapedUsername,
+    });
   } catch (error) {
     if (error instanceof Error) {
       console.error("Error retrieving user data:", error.message);
