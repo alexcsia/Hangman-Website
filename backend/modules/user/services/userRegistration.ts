@@ -1,5 +1,5 @@
 import { User } from "../../models/User.ts";
-import { hashPassword } from "../utils/hashPassword.ts";
+import { hashPassword } from "../utils/passwordUtils/hashPassword.ts";
 
 export const addUser = async (
   username: string,
@@ -7,7 +7,8 @@ export const addUser = async (
   password: string
 ) => {
   try {
-    const hashedPassword = hashPassword(password);
+    const hashedPassword = await hashPassword(password);
+
     const newUser = new User({
       username: username,
       email: email,

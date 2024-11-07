@@ -1,15 +1,19 @@
 import express from "express";
 import {
-  authenticateUser,
   userLogout,
-  refreshToken,
-} from "../../modules/user/controllers/auth.ts";
+  authenticateUser,
+  getNewAccessToken,
+} from "../../modules/user/controllers/auth/index.ts";
+
+// import { userLogout } from "../../modules/user/controllers/auth/userLogout.ts";
+// import { getNewAccessToken } from "../../modules/user/controllers/auth/getNewAccessToken.ts";
+// import { authenticateUser } from "../../modules/user/controllers/auth/authenticateUser.ts";
 import { authenticateJWT } from "../../../backend/loaders/middleware/authenticateJWT.ts";
 
 const router = express.Router();
 
 router.post("/login", authenticateUser);
 router.get("/logout", authenticateJWT, userLogout);
-router.get("/refresh", refreshToken);
+router.get("/refresh", getNewAccessToken);
 
 export default router;

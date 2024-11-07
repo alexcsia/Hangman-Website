@@ -1,5 +1,5 @@
 import validator from "validator";
-import { User } from "../../../models/User.ts";
+import { getUserByEmail } from "../userQueries/getUserByEmail.ts";
 
 export const validateEmail = async (email: string): Promise<string> => {
   email = email.trim();
@@ -11,7 +11,8 @@ export const validateEmail = async (email: string): Promise<string> => {
     throw new Error("Invalid email format");
   }
 
-  const existingUser = await User.findOne({ email: normalizedEmail });
+  const existingUser = await getUserByEmail(normalizedEmail);
+
   if (existingUser) {
     throw new Error("Email is already in use");
   }
