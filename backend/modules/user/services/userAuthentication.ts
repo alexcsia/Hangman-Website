@@ -1,7 +1,7 @@
 import { User } from "../../models/User.ts";
-import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import isJwtPayloadWithUserData from "../utils/CheckIsJWTPayload.ts";
+import isJwtPayloadWithUserData from "../utils/jwtUtils/CheckIsJWTPayload.ts";
+import { comparePasswords } from "../utils/passwordUtils/comparePassword.ts";
 
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -11,18 +11,13 @@ export const loginUser = async (password: string, email: string) => {
 
   if (!REFRESH_TOKEN_SECRET)
     throw new Error("REFRESH_TOKEN_SECRET is not defined");
-
   try {
     const user = await User.findOne({ email });
     if (!user) {
       throw new Error("Invalid email or password");
     }
 
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch) {
-      throw new Error("Invalid email or password");
-    }
-
+    comparePasswords(password, user);
     const accessToken = jwt.sign(
       { id: user._id, email: user.email, username: user.username },
       JWT_SECRET,
@@ -36,7 +31,6 @@ export const loginUser = async (password: string, email: string) => {
       REFRESH_TOKEN_SECRET,
       { expiresIn: "3d" }
     );
-
     return { accessToken: accessToken, refreshToken: refreshToken };
   } catch (error) {
     if (error instanceof Error) {
@@ -60,7 +54,6 @@ export const generateAccessToken = async (refreshToken: string) => {
     } catch (error) {
       throw new Error("Refresh token is invalid");
     }
-
     const userId = verifiedToken.id;
     const user = await User.findById(userId);
     if (!user) throw new Error("Could not find user");
@@ -72,7 +65,6 @@ export const generateAccessToken = async (refreshToken: string) => {
         expiresIn: "15m",
       }
     );
-
     return accessToken;
   } catch (error) {
     if (error instanceof Error) {

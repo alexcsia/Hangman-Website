@@ -4,7 +4,7 @@ import {
   validateUsername,
   validateEmail,
   validatePassword,
-} from "../utils/validators";
+} from "../utils/validators/index.ts";
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
