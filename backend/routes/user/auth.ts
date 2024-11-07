@@ -8,7 +8,7 @@ import {
 // import { userLogout } from "../../modules/user/controllers/auth/userLogout.ts";
 // import { getNewAccessToken } from "../../modules/user/controllers/auth/getNewAccessToken.ts";
 // import { authenticateUser } from "../../modules/user/controllers/auth/authenticateUser.ts";
-import { authenticateJWT } from "../../../backend/loaders/middleware/authenticateJWT.ts";
+import { authenticateJWT } from "../middleware/authenticateJWT.ts";
 
 const router = express.Router();
 

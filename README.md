@@ -106,3 +106,13 @@ Alongside the access token, a refresh token is issued when a user logs in, and i
 The application interacts with the database through models created with the help of an ORM. Mongoose is used to define schemas for lobbies users and words, enforcing structure and data integrity and preventing against database injection attacks. (e.g. Lobby.ts)
 
 # Clean code
+
+## Single responsability principle
+
+- Each controller only handles its specific logic (e.g. register.ts https://github.com/alexcsia/Hangman-Website/blob/main/backend/modules/user/controllers/register.ts)
+
+-
+
+## DRY
+
+- Shared functions are abstracted into utility files

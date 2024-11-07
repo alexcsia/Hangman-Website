@@ -5,7 +5,7 @@ import { User } from "../../../backend/modules/models/User.ts";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
-import { generateToken } from "../../../backend/utils/generateJWT.ts";
+import { generateToken } from "../utils/generateJWT.ts";
 import { Lobby } from "../../../backend/modules/models/Lobby.ts";
 
 let server: http.Server;

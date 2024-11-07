@@ -1,7 +1,7 @@
 import { createServer } from "http";
 import { Server as SocketIOServer } from "socket.io";
 import { io, Socket } from "socket.io-client";
-import { handleIoEvents } from "../../../backend/ioServer";
+import { handleIoEvents } from "../../../backend/ioServer/ioServer";
 
 describe("websocket chat", () => {
   let httpServer: ReturnType<typeof createServer>;
@@ -9,13 +9,14 @@ describe("websocket chat", () => {
   let client1: Socket;
   let client2: Socket;
   const lobbyId = "testLobby";
+  const messageFromUser1 = "Hello from user1!";
+  const messageFromUser2 = "Hello from user2!";
 
   beforeAll((done) => {
     httpServer = createServer();
     ioServer = new SocketIOServer(httpServer);
     handleIoEvents(httpServer);
 
-    // start the server
     httpServer.listen(() => {
       const { port } = httpServer.address() as { port: number };
       client1 = io(`http://localhost:${port}`);
@@ -30,29 +31,24 @@ describe("websocket chat", () => {
     client2.disconnect();
     ioServer.close();
     httpServer.close(done);
-  });
+  }, 10000);
 
   test("users should be able to chat", (done) => {
     client1.emit("joinLobby", lobbyId);
     client2.emit("joinLobby", lobbyId);
 
-    const messageFromUser1 = "Hello from user1!";
-    const messageFromUser2 = "Hello from user2!";
-
     let receivedMessages = 0;
 
-    client2.on("chat message", ({ msg }: { msg: string }) => {
-      console.log(`Client 2 received: ${msg}`);
-
+    client1.on("chat message", ({ msg }: { msg: string }) => {
+      console.log(`Client 1 received: ${msg}`);
       expect([messageFromUser1, messageFromUser2]).toContain(msg);
 
       receivedMessages++;
       if (receivedMessages === 2) done();
     });
 
-    client1.on("chat message", ({ msg }: { msg: string }) => {
-      console.log(`Client 1 received: ${msg}`);
-
+    client2.on("chat message", ({ msg }: { msg: string }) => {
+      console.log(`Client 2 received: ${msg}`);
       expect([messageFromUser1, messageFromUser2]).toContain(msg);
 
       receivedMessages++;

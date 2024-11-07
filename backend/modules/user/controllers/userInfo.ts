@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IAuthenticatedRequest } from "../../../loaders/middleware/authenticateJWT.ts";
+import { IAuthenticatedRequest } from "../../../routes/middleware/authenticateJWT.ts";
 
 export const getUserInfo = async (
   req: IAuthenticatedRequest,
