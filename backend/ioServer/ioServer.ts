@@ -1,140 +1,16 @@
 import http from "http";
 import { Server } from "socket.io";
-import addWinToUser from "./helpers/addWinToUser.ts";
-import updateLobbyStatus from "./helpers/updateLobbyStatus.ts";
-import { selectRandomWord } from "./helpers/selectRandomWord.ts";
+import {
+  handleJoinLobby,
+  handleMakeGuess,
+  handleRematch,
+  handleQuit,
+} from "./events/game/index.ts";
+import { handleChatMessage } from "./events/chat/chatMessage.ts";
 
-interface PlayerState {
-  guessedLetters: string[];
-  remainingAttempts: number;
-}
-
-interface GameState {
-  word: string;
-  players: Record<string, PlayerState>;
-}
+import { GameState } from "./types";
 
 const lobbies: Record<string, GameState> = {};
-const rematchCounts: Record<string, Set<string>> = {};
-
-const emitGameUpdate = (socket: any, lobbyId: string, playerId: string) => {
-  const lobby = lobbies[lobbyId];
-  const playerState = lobby?.players[playerId];
-  socket.emit("gameUpdate", {
-    word: lobby?.word,
-    wordLength: lobby?.word.length,
-    playerState: playerState,
-  });
-};
-
-const handleJoinLobby = async (
-  socket: any,
-  lobbyId: string,
-  playerId: string,
-  io: Server
-) => {
-  socket.join(lobbyId);
-  console.log(`Player ${playerId} joined lobby: ${lobbyId}`);
-
-  if (!lobbies[lobbyId]) {
-    const randomWord = (await selectRandomWord()) || "example";
-    lobbies[lobbyId] = {
-      word: randomWord,
-      players: {},
-    };
-  }
-
-  if (!lobbies[lobbyId].players[playerId]) {
-    lobbies[lobbyId].players[playerId] = {
-      guessedLetters: [],
-      remainingAttempts: 6,
-    };
-  }
-
-  emitGameUpdate(socket, lobbyId, playerId);
-};
-
-const handleMakeGuess = (
-  socket: any,
-  lobbyId: string,
-  playerId: string,
-  letter: string,
-  username: string,
-  io: Server
-) => {
-  const lobby = lobbies[lobbyId];
-  const playerState = lobby?.players[playerId];
-
-  if (lobby && playerState && playerState.remainingAttempts > 0) {
-    if (!playerState.guessedLetters.includes(letter)) {
-      playerState.guessedLetters.push(letter);
-
-      if (!lobby.word.includes(letter)) {
-        playerState.remainingAttempts--;
-      }
-    }
-
-    emitGameUpdate(socket, lobbyId, playerId);
-
-    const isGameWon = lobby.word
-      .split("")
-      .every((letter) => playerState.guessedLetters.includes(letter));
-
-    if (isGameWon) {
-      io.to(lobbyId).emit("gameOver", `${username} won!`);
-      addWinToUser(playerId).catch(console.log);
-      return;
-    }
-
-    if (playerState.remainingAttempts <= 0) {
-      io.to(lobbyId).emit("gameOver", `${username} is out of tries!`);
-    }
-  }
-};
-
-const handleRematch = async (
-  socket: any,
-  lobbyId: string,
-  playerId: string,
-  io: Server
-) => {
-  if (!rematchCounts[lobbyId]) {
-    rematchCounts[lobbyId] = new Set();
-  }
-
-  rematchCounts[lobbyId].add(playerId);
-
-  if (rematchCounts[lobbyId].size === 2) {
-    const randomWord = (await selectRandomWord()) || "word";
-    lobbies[lobbyId].word = randomWord;
-
-    Object.keys(lobbies[lobbyId].players).forEach((id) => {
-      lobbies[lobbyId].players[id] = {
-        guessedLetters: [],
-        remainingAttempts: 6,
-      };
-    });
-
-    delete rematchCounts[lobbyId];
-
-    io.to(lobbyId).emit("gameUpdate", {
-      word: randomWord,
-      wordLength: randomWord.length,
-      playerState: lobbies[lobbyId].players[playerId],
-    });
-  }
-};
-
-const handleQuit = (
-  socket: any,
-  lobbyId: string,
-  playerId: string,
-  io: Server
-) => {
-  console.log(`User ${playerId} is quitting lobby ${lobbyId}`);
-  updateLobbyStatus(lobbyId);
-  io.to(lobbyId).emit("matchQuit");
-};
 
 export const handleIoEvents = (httpServer: http.Server) => {
   try {
@@ -146,7 +22,7 @@ export const handleIoEvents = (httpServer: http.Server) => {
       );
 
       socket.on("chat message", ({ msg, lobbyId }) => {
-        io.to(lobbyId).emit("chat message", { msg });
+        handleChatMessage(socket, msg, lobbyId, io);
       });
 
       socket.on("makeGuess", ({ lobbyId, playerId, letter, username }) => {
@@ -158,7 +34,7 @@ export const handleIoEvents = (httpServer: http.Server) => {
       });
 
       socket.on("quit", ({ lobbyId, playerId }) => {
-        handleQuit(socket, lobbyId, playerId, io);
+        handleQuit(socket, lobbyId, playerId, io, lobbies);
       });
 
       socket.on("disconnect", () => {
