@@ -19,7 +19,7 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"] // you are not using path aliases even though it is set up
     }
   },
   "include": [

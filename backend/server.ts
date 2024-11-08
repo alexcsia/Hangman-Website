@@ -2,7 +2,7 @@ import express from "express";
 import next from "next";
 import http from "http";
 import { applyRoutes } from "./routes/routes.ts";
-import { setUpMiddleware } from "./middleware/middleware.ts";
+import { setUpMiddleware } from "./middleware";
 import connectMongoDB from "./loaders/database.ts";
 import { handleIoEvents } from "./ioServer/ioServer.ts";
 

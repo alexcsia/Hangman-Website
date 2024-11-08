@@ -24,10 +24,10 @@ export const joinLobby = async (req: IAuthenticatedRequest, res: Response) => {
     if (!lobby) {
       throw new Error("Game not found");
     }
-
+    
     const userIdFromToken = req.user?.id;
-    if (!userIdFromToken)
-      throw new Error("Please log in before trying to join a game");
+    // if (!userIdFromToken)
+      // throw new Error("Please log in before trying to join a game");
 
     const userIdObject = new mongoose.Types.ObjectId(userIdFromToken);
     const lobbyIdObject = new mongoose.Types.ObjectId(lobby.id);

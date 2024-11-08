@@ -1,7 +1,7 @@
 import { Lobby } from "../../models/Lobby.ts";
 import mongoose from "mongoose";
 
-export const checkIfUserAlreadyInLobby = async (
+export const isUserInLobby = async (
   userId: mongoose.Types.ObjectId
 ) => {
   const userInOtherLobby = await Lobby.findOne({
