@@ -33,9 +33,10 @@ export const generateAccessToken = async (refreshToken: string) => {
     const user = await User.findById(userId);
     if (!user) throw new Error("Could not find user");
 
-    const accessToken = signAccessJWT(user);
-    return accessToken;
+    return signAccessJWT(user);
   } catch (error: unknown) {
-    if (error instanceof Error) throw new Error(error.message);
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
   }
 };

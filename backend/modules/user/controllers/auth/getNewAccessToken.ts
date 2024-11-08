@@ -8,7 +8,9 @@ export const getNewAccessToken = async (req: Request, res: Response) => {
     if (!refreshToken) return res.sendStatus(401);
 
     const newAccessToken = await generateAccessToken(refreshToken);
-    if (newAccessToken) setAccessTokenCookie(res, newAccessToken);
+    if (newAccessToken) {
+      setAccessTokenCookie(res, newAccessToken);
+    }
 
     return res
       .status(200)
