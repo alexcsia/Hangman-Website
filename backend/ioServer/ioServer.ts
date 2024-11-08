@@ -1,6 +1,6 @@
 import http from "http";
 import { Server } from "socket.io";
-import addWinToUser from "../modules/user/services/addWinToUser.ts";
+import addWinToUser from "./helpers/addWinToUser.ts";
 import updateLobbyStatus from "./helpers/updateLobbyStatus.ts";
 import { selectRandomWord } from "./helpers/selectRandomWord.ts";
 
