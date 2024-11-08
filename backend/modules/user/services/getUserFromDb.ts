@@ -1,5 +1,6 @@
 import { User } from "../../models/User.ts";
 import mongoose from "mongoose";
+import { escapeUsername } from "../utils/validators/validateUsername.ts";
 
 export const getUserFromDb = async (userId: string) => {
   if (!mongoose.Types.ObjectId.isValid(userId)) {
@@ -16,7 +17,7 @@ export const getUserFromDb = async (userId: string) => {
 
     return {
       email: userData.email,
-      username: userData.username,
+      username: userData.username ? escapeUsername(userData.username) : "",
       winNum: userData.winNum,
     };
   } catch (error) {

@@ -15,6 +15,7 @@ const config: Config = {
   extensionsToTreatAsEsm: [".ts"],
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   verbose: true,
+  testPathIgnorePatterns: ["/node_modules/", "/__tests__/utils/"],
 };
 
 export default config;
