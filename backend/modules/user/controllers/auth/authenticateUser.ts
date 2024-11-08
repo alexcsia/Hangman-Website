@@ -1,22 +1,15 @@
 import { Response, Request } from "express";
-import { comparePasswords } from "../../utils/passwordUtils/comparePassword.ts";
-import { getUserByEmail } from "../../utils/userQueries/getUserByEmail.ts";
-import { setAuthCookies } from "../utils/cookies/setAuthCookies.ts";
 import { loginUser } from "../../services/userAuthentication.ts";
+import { setAuthCookies } from "../utils/cookies/setAuthCookies.ts";
 
 export const authenticateUser = async (req: Request, res: Response) => {
   try {
-    const userData = req.body;
+    const { email, password } = req.body;
 
-    const user = await getUserByEmail(userData.email);
-    if (!user) {
-      throw new Error("Invalid email or password");
+    const tokens = await loginUser(email, password);
+    if (tokens) {
+      setAuthCookies(res, tokens);
     }
-
-    await comparePasswords(userData.password, user);
-
-    const userTokens = await loginUser(user);
-    if (userTokens) setAuthCookies(res, userTokens);
 
     return res.status(200).json({ message: "Login successful" });
   } catch (error: unknown) {

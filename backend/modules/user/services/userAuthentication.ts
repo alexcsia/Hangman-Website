@@ -1,21 +1,27 @@
-import { User, IUser } from "../../models/User.ts";
-import {
-  signAccessJWT,
-  signRefreshJWT,
-  verifyRefreshToken,
-} from "../utils/jwtUtils/index.ts";
+import { User } from "../../models/User.ts";
+import { comparePasswords } from "../utils/passwordUtils/comparePassword.ts";
+import { signAccessJWT, signRefreshJWT } from "../utils/jwtUtils/index.ts";
+import { getUserByEmail } from "../utils/userQueries/getUserByEmail.ts";
+import { verifyRefreshToken } from "../utils/jwtUtils/index.ts";
 
-export const loginUser = async (user: IUser) => {
+export const loginUser = async (email: string, password: string) => {
   try {
+    const user = await getUserByEmail(email);
+    if (!user) throw new Error("Invalid email or password");
+
+    await comparePasswords(password, user);
+
     const accessToken = signAccessJWT(user);
     const refreshToken = signRefreshJWT(user);
-
     if (!accessToken || !refreshToken) {
       throw new Error("Failed to generate tokens");
     }
-    return { accessToken: accessToken, refreshToken: refreshToken };
+
+    return { accessToken, refreshToken };
   } catch (error: unknown) {
-    if (error instanceof Error) throw new Error(error.message);
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
   }
 };
 
