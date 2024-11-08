@@ -146,7 +146,6 @@ export const handleIoEvents = (httpServer: http.Server) => {
       );
 
       socket.on("chat message", ({ msg, lobbyId }) => {
-        console.log(`Message in lobby ${lobbyId}: ${msg}`);
         io.to(lobbyId).emit("chat message", { msg });
       });
 
