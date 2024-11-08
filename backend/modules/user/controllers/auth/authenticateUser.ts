@@ -1,5 +1,6 @@
 import { Response, Request } from "express";
-import { loginUser } from "../../services/userAuthentication.ts";
+import userAuthentication from "../../services/userAuthentication.ts";
+// import { loginUser } from "../../services/userAuthentication.ts";
 import { setAuthCookies } from "../utils/cookies/setAuthCookies.ts";
 
 /**
@@ -19,7 +20,7 @@ export const authenticateUser = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
 
-    const tokens = await loginUser(email, password);
+    const tokens = await userAuthentication.loginUser(email, password);
     if (tokens) {
       setAuthCookies(res, tokens);
     }

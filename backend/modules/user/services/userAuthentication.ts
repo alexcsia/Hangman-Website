@@ -40,3 +40,8 @@ export const generateAccessToken = async (refreshToken: string) => {
     }
   }
 };
+
+export default {
+  loginUser,
+  generateAccessToken,
+}
