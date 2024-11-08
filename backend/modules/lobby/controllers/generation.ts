@@ -3,6 +3,19 @@ import { createLobby } from "../services/createLobby.ts";
 import { IAuthenticatedRequest } from "../../../routes/middleware/authenticateJWT.ts";
 import mongoose from "mongoose";
 
+/**
+ * Controller function to generate a new game lobby and provide a redirect URL
+ *
+ * This function attempts to create a new game lobby for the authenticated user by utilizing their user ID from the token
+ * If the user ID is missing or if an error occurs during lobby creation, an error is thrown and a 500 response with an
+ * error message is returned. Upon successful lobby creation, a JSON response with a redirect URL containing the
+ * lobby ID and a unique code is sent, redirecting the user to the newly created game lobby
+ *
+ * @param req - The incoming request object containing the authenticated user's ID in `req.user`
+ * @param res - The response object used to send the redirect URL or an error message
+ * @returns A JSON response containing the redirect URL or an error message if something goes wrong
+ */
+
 export const generateCodeAndLobby = async (
   req: IAuthenticatedRequest,
   res: Response

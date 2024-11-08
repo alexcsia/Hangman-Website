@@ -4,6 +4,19 @@ import { IAuthenticatedRequest } from "../../../routes/middleware/authenticateJW
 import { addPlayerToLobby } from "../services/addPlayerToLobby.ts";
 import mongoose from "mongoose";
 
+/**
+ * Controller function to allow a user to join an existing game lobby
+ *
+ * This function first checks if a game lobby exists by the provided lobby code. If the lobby is found, it ensures the user
+ * is authenticated by checking the user ID from the token. If either the lobby is not found or the user is not authenticated,
+ * an error is thrown and a 500 response with an error message is returned. Upon successful joining, the user is added
+ * to the lobby and a JSON response containing the redirect URL to the game is sent
+ *
+ * @param req - The incoming request object containing the authenticated user's information and the lobby code
+ * @param res - The response object used to send the redirect URL or an error message
+ * @returns A JSON response containing the redirect URL to the game or an error message if something goes wrong
+ */
+
 export const joinLobby = async (req: IAuthenticatedRequest, res: Response) => {
   try {
     const data = req.body;
