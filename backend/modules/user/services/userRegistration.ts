@@ -6,11 +6,7 @@ import {
   validatePassword,
 } from "../utils/validators/index.ts";
 
-export const addUser = async (
-  username: string,
-  email: string,
-  password: string
-) => {
+const addUser = async (username: string, email: string, password: string) => {
   const validatedUsername = validateUsername(username);
   const validatedEmail = await validateEmail(email);
   const validatedPassword = validatePassword(password);
@@ -30,4 +26,8 @@ export const addUser = async (
       throw new Error(error.message || "Could not save user");
     }
   }
+};
+
+export default {
+  addUser,
 };

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { addUser } from "../services/userRegistration.ts";
+import userRegistration from "../services/userRegistration.ts";
 
 /**
  * Controller function to register a new user
@@ -18,7 +18,7 @@ export const registerUser = async (req: Request, res: Response) => {
   try {
     const { username, email, password } = req.body;
 
-    await addUser(username, email, password);
+    await userRegistration.addUser(username, email, password);
     return res.status(201).json("User registered successfully");
   } catch (error: unknown) {
     if (error instanceof Error) {
