@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { generateAccessToken } from "../../services/userAuthentication.ts";
+import userAuthentication from "../../services/userAuthentication.ts";
 import { setAccessTokenCookie } from "../utils/cookies/accessJWTCookie.ts";
 
 /**
@@ -20,7 +20,9 @@ export const getNewAccessToken = async (req: Request, res: Response) => {
     const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) return res.sendStatus(401);
 
-    const newAccessToken = await generateAccessToken(refreshToken);
+    const newAccessToken = await userAuthentication.generateAccessToken(
+      refreshToken
+    );
     if (newAccessToken) {
       setAccessTokenCookie(res, newAccessToken);
     }

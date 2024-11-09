@@ -4,7 +4,7 @@ import { signAccessJWT, signRefreshJWT } from "../utils/jwtUtils/index.ts";
 import { getUserByEmail } from "../utils/userQueries/getUserByEmail.ts";
 import { verifyRefreshToken } from "../utils/jwtUtils/index.ts";
 
-export const loginUser = async (email: string, password: string) => {
+const loginUser = async (email: string, password: string) => {
   try {
     const user = await getUserByEmail(email);
     if (!user) throw new Error("Invalid email or password");
@@ -25,7 +25,7 @@ export const loginUser = async (email: string, password: string) => {
   }
 };
 
-export const generateAccessToken = async (refreshToken: string) => {
+const generateAccessToken = async (refreshToken: string) => {
   try {
     const verifiedToken = verifyRefreshToken(refreshToken);
     const userId = verifiedToken.id;
@@ -39,4 +39,9 @@ export const generateAccessToken = async (refreshToken: string) => {
       throw new Error(error.message);
     }
   }
+};
+
+export default {
+  loginUser,
+  generateAccessToken,
 };
