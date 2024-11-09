@@ -26,7 +26,3 @@ export const getUser = async (userId: string) => {
     }
   }
 };
-
-export default {
-  getUser,
-};

@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import isJwtPayloadWithUserData from "./CheckIsJWTPayload.ts";
+import isJwtPayloadWithUserData from "./isJWTPayload.ts";
 
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 if (!REFRESH_TOKEN_SECRET)
