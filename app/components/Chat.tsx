@@ -27,17 +27,21 @@ const Chat: React.FC<ChatProps> = ({
 
   useEffect(() => {
     const socket = socketRef.current;
+
     const handleMessage = ({ msg }: { msg: string }) => {
-      setMessages((prevMessages) => {
-        const newMessages = [...prevMessages, msg];
-        return newMessages;
-      });
+      setMessages((prevMessages) => [...prevMessages, msg]);
+    };
+
+    const handleRateError = (errorMsg: string) => {
+      setMessages((prevMessages) => [...prevMessages, `⚠️ ${errorMsg}`]);
     };
 
     socket?.on("chat message", handleMessage);
+    socket?.on("rate error", handleRateError);
 
     return () => {
       socket?.off("chat message", handleMessage);
+      socket?.off("error", handleRateError);
       localStorage.removeItem("chatMessages");
     };
   }, [lobbyId, playerId, socketRef]);
@@ -67,7 +71,12 @@ const Chat: React.FC<ChatProps> = ({
       <h1 className="text-slate-700">Chat with your opponent</h1>
       <div className="border rounded border-gray-700 p-2 mb-2 h-[300px] w-[300px] overflow-y-scroll">
         {messages.map((msg, index) => (
-          <div key={index}>{msg}</div>
+          <div
+            key={index}
+            className={msg.startsWith("⚠️") ? "text-red-500" : ""}
+          >
+            {msg}
+          </div>
         ))}
       </div>
 

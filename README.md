@@ -89,7 +89,7 @@ Jest: Used for running tests and ensuring code correctness.
     Passwords are hashed and salted with 10 rounds of salt before storing to database. The hashing algorithm used is _bcrypt ^2.4.3_
     Several password strength rules are enforced. This includes requiring a mix of uppercase, lowercase, numeric characters, and symbols, as well as setting a minimum length for the password. (e.g. userRegistration.ts)
 
-## JWT Authentication
+## JWT Authentication and secure cookies
 
 JSON Web Tokens are used for user authentication. Upon authentication, a JWT is issued and stored in an HTTP-only cookie. The JWT is verified for each request for protected routes to ensure that the user is authorized to access the resources.(e.g. userAuthentication.ts)
 
@@ -104,6 +104,10 @@ Alongside the access token, a refresh token is issued when a user logs in, and i
 ## Use of ORM(Mongoose)
 
 The application interacts with the database through models created with the help of an ORM. Mongoose is used to define schemas for lobbies users and words, enforcing structure and data integrity and preventing against database injection attacks. (e.g. Lobby.ts)
+
+## Error Handling:
+
+Errors are handled such in a way that prevents the exposure of sensitive information
 
 # Clean code
 

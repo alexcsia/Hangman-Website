@@ -12,6 +12,14 @@ import { GameState } from "./types";
 
 const lobbies: Record<string, GameState> = {};
 
+const MESSAGE_LIMIT = 5;
+const TIME_WINDOW = 5000;
+
+const messageCounts = new Map<
+  string,
+  { count: number; timer: NodeJS.Timeout }
+>();
+
 export const handleIoEvents = (httpServer: http.Server) => {
   try {
     const io = new Server(httpServer);
@@ -21,7 +29,28 @@ export const handleIoEvents = (httpServer: http.Server) => {
         handleJoinLobby(socket, lobbyId, playerId, io)
       );
 
+      // rate limiting
       socket.on("chat message", ({ msg, lobbyId }) => {
+        const socketId = socket.id;
+
+        if (!messageCounts.has(socketId)) {
+          messageCounts.set(socketId, {
+            count: 1,
+            timer: setTimeout(
+              () => messageCounts.delete(socketId),
+              TIME_WINDOW
+            ),
+          });
+        } else {
+          const userData = messageCounts.get(socketId)!;
+          userData.count += 1;
+
+          if (userData.count > MESSAGE_LIMIT) {
+            socket.emit("rate error", "Rate limit exceeded, please wait.");
+            return;
+          }
+        }
+
         handleChatMessage(socket, msg, lobbyId, io);
       });
 
@@ -38,6 +67,7 @@ export const handleIoEvents = (httpServer: http.Server) => {
       });
 
       socket.on("disconnect", () => {
+        messageCounts.delete(socket.id);
         console.log("User disconnected");
       });
     });
