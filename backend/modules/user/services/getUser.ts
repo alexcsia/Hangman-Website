@@ -2,7 +2,7 @@ import { User } from "../../models/User.ts";
 import mongoose from "mongoose";
 import { escapeUsername } from "../utils/validators/validateUsername.ts";
 
-export const getUserFromDb = async (userId: string) => {
+export const getUser = async (userId: string) => {
   if (!mongoose.Types.ObjectId.isValid(userId)) {
     throw new Error("Invalid user ID");
   }
@@ -25,4 +25,8 @@ export const getUserFromDb = async (userId: string) => {
       throw new Error(error.message);
     }
   }
+};
+
+export default {
+  getUser,
 };
