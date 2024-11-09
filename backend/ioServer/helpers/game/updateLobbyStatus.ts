@@ -1,4 +1,4 @@
-import { Lobby } from "../../modules/models/Lobby.ts";
+import { Lobby } from "../../../modules/models/Lobby.ts";
 
 const updateLobbyStatus = async (lobbyId: string) => {
   const lobby = await Lobby.findById(lobbyId);

@@ -1,5 +1,5 @@
 import { Server } from "socket.io";
-import { selectRandomWord } from "../../helpers/selectRandomWord.ts";
+import { selectRandomWord } from "../../helpers/game/selectRandomWord.ts";
 import { lobbies, rematchCounts } from "../../types.ts";
 
 export const handleRematch = async (

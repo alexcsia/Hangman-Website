@@ -1,6 +1,6 @@
 import { Server } from "socket.io";
 import { emitGameUpdate } from "./gameUpdate.ts";
-import addWinToUser from "../../helpers/addWinToUser.ts";
+import addWinToUser from "../../helpers/game/addWinToUser.ts";
 import { lobbies } from "../../types.ts";
 
 export const handleMakeGuess = (
