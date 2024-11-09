@@ -22,9 +22,6 @@ export const generateCodeAndLobby = async (
 ) => {
   try {
     const userIdFromToken = req.user?.id;
-    if (!userIdFromToken) {
-      throw new Error("User ID is missing");
-    }
 
     const userIdObject = new mongoose.Types.ObjectId(userIdFromToken);
     const lobby = await createLobby(userIdObject);
