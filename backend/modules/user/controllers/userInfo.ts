@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IAuthenticatedRequest } from "../../../api/middleware/authenticateJWT.ts";
+import { IAuthenticatedRequest } from "../../types/IAuthenticatedRequest.ts";
 
 /**
  * Controller function to retrieve the authenticated user's basic information

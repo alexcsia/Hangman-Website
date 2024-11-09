@@ -1,19 +1,9 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 import isJwtPayloadWithUserData from "../../modules/user/utils/jwtUtils/CheckIsJWTPayload.ts";
+import { IAuthenticatedRequest } from "@/backend/modules/types/IAuthenticatedRequest.ts";
 
 const JWT_SECRET = process.env.JWT_SECRET || "secret_key";
-
-interface IJwtPayload {
-  id: string;
-  email: string;
-  username: string;
-}
-
-// adding optional user property
-export interface IAuthenticatedRequest extends Request {
-  user?: IJwtPayload;
-}
 
 export const authenticateJWT = (
   req: IAuthenticatedRequest,
