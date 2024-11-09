@@ -31,13 +31,12 @@ Risk: man-in-the-middle attacks (MITM), flooding (DoS/DDoS), Cross-site Scriptin
 Mitigation:
 WebSocket Secure (wss://) is used to encrypt communication between the client and server, ensuring that messages cannot be intercepted or manipulated by attackers.
 
-Rate-limiting for the WebSocket chatMessage event to prevent flooding and DoS attacks.
-
 Chat Feature:
 
 Risk: Cross-site Scripting (XSS), malicious content injected into the chat.
 Mitigation:
 Input messages are sanitized using DOMPurify.js before rendering on the frontend, protecting against XSS and other client-side script injection attacks
+Rate-limiting for the WebSocket chatMessage event to prevent flooding and DoS attacks.
 
 ## User Input Validation and Sanitization:
 
