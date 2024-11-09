@@ -1,12 +1,12 @@
 import { Lobby } from "../../models/Lobby.ts";
 import mongoose from "mongoose";
-import { checkIfUserAlreadyInLobby } from "../utils/checkIfUserInLobby.ts";
+import { isUserInLobby } from "../utils/isUserInLobby.ts";
 
 export const addPlayerToLobby = async (
   lobbyId: mongoose.Types.ObjectId,
   userId: mongoose.Types.ObjectId
 ) => {
-  const userInOtherLobby = await checkIfUserAlreadyInLobby(userId);
+  const userInOtherLobby = await isUserInLobby(userId);
   if (userInOtherLobby) throw new Error("User is already part of a lobby");
 
   try {
