@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { IAuthenticatedRequest } from "../../../routes/middleware/authenticateJWT.ts";
+import { IAuthenticatedRequest } from "../../../api/middleware/authenticateJWT.ts";
 import { getUserFromDb } from "../services/getUserFromDb.ts";
 
 /**

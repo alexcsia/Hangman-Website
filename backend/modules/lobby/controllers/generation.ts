@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { createLobby } from "../services/createLobby.ts";
-import { IAuthenticatedRequest } from "../../../routes/middleware/authenticateJWT.ts";
+import { IAuthenticatedRequest } from "../../../api/middleware/authenticateJWT.ts";
 import mongoose from "mongoose";
 
 /**

@@ -1,8 +1,8 @@
 import express from "express";
 import next from "next";
 import http from "http";
-import { applyRoutes } from "./routes/routes.ts";
-import { setUpMiddleware } from "./middleware/middleware.ts";
+import { applyRoutes } from "./api/routes/applyRoutes.ts";
+import { setUpMiddleware } from "./middleware/index.ts";
 import connectMongoDB from "./loaders/database.ts";
 import { handleIoEvents } from "./ioServer/ioServer.ts";
 
