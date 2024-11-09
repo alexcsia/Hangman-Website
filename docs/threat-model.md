@@ -30,8 +30,8 @@ JWT cookies are only sent when the user is navigating directly on the site. They
 Risk: man-in-the-middle attacks (MITM), flooding (DoS/DDoS), Cross-site Scripting (XSS).
 Mitigation:
 WebSocket Secure (wss://) is used to encrypt communication between the client and server, ensuring that messages cannot be intercepted or manipulated by attackers.
-To be implemented soon:
--rate-limiting or message throttling on WebSocket events to prevent flooding and DoS attacks.
+
+Rate-limiting for the WebSocket chatMessage event to prevent flooding and DoS attacks.
 
 Chat Feature:
 
