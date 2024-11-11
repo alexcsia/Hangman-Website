@@ -1,6 +1,6 @@
 import { Response } from "express";
-import { setRefreshTokenCookie } from "./refreshJWTCookie.ts";
-import { setAccessTokenCookie } from "./accessJWTCookie.ts";
+import { setRefreshTokenCookie } from "./refreshJWTCookie";
+import { setAccessTokenCookie } from "./accessJWTCookie";
 
 interface UserTokens {
   accessToken: string;

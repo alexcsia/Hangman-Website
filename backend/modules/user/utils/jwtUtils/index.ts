@@ -1,2 +1,2 @@
-export { signAccessJWT, signRefreshJWT } from "./signJWT.ts";
-export { verifyRefreshToken } from "./verifyJWT.ts";
+export { signAccessJWT, signRefreshJWT } from "./signJWT";
+export { verifyRefreshToken } from "./verifyJWT";

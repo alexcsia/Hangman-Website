@@ -1,3 +1,3 @@
-export { validateUsername } from "./validateUsername.ts";
-export { validateEmail } from "./validateEmail.ts";
-export { validatePassword } from "./validatePassword.ts";
+export { validateUsername } from "./validateUsername";
+export { validateEmail } from "./validateEmail";
+export { validatePassword } from "./validatePassword";

@@ -1,4 +1,4 @@
-import { IUser } from "../../../models/User.ts";
+import { IUser } from "../../../models/User";
 import jwt from "jsonwebtoken";
 
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;

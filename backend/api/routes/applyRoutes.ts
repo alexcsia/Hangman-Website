@@ -1,9 +1,9 @@
 import express from "express";
-import authRoutes from "./auth/auth.ts";
-import registerRoutes from "./registration/register.ts";
-import userRoutes from "./profile/user.ts";
-import playRoutes from "./play/play.ts";
-import userInfo from "./userInfo/userInfo.ts";
+import authRoutes from "./auth/auth";
+import registerRoutes from "./registration/register";
+import userRoutes from "./profile/user";
+import playRoutes from "./play/play";
+import userInfo from "./userInfo/userInfo";
 
 export const applyRoutes = (server: express.Application, handle: Function) => {
   server.use("/api/auth", authRoutes);

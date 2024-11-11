@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { searchForLobby } from "./helpers/searchForLobby.ts";
-import { IAuthenticatedRequest } from "../../types/IAuthenticatedRequest.ts";
-import { addPlayerToLobby } from "../services/addPlayerToLobby.ts";
+import { searchForLobby } from "./helpers/searchForLobby";
+import { IAuthenticatedRequest } from "../../types/IAuthenticatedRequest";
+import { addPlayerToLobby } from "../services/addPlayerToLobby";
 import mongoose from "mongoose";
 
 /**

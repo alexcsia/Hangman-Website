@@ -1,10 +1,10 @@
-import { User } from "../../models/User.ts";
-import { hashPassword } from "../utils/passwordUtils/hashPassword.ts";
+import { User } from "../../models/User";
+import { hashPassword } from "../utils/passwordUtils/hashPassword";
 import {
   validateUsername,
   validateEmail,
   validatePassword,
-} from "../utils/validators/index.ts";
+} from "../utils/validators/index";
 
 const addUser = async (username: string, email: string, password: string) => {
   const validatedUsername = validateUsername(username);

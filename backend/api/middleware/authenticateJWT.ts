@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
-import isJwtPayloadWithUserData from "../../modules/user/utils/jwtUtils/isJWTPayload.ts";
-import { IAuthenticatedRequest } from "@/backend/modules/types/IAuthenticatedRequest.ts";
+import isJwtPayloadWithUserData from "../../modules/user/utils/jwtUtils/isJWTPayload";
+import { IAuthenticatedRequest } from "../../modules/types/IAuthenticatedRequest";
 
 const JWT_SECRET = process.env.JWT_SECRET || "secret_key";
 

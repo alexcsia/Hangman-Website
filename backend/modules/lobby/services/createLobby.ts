@@ -1,7 +1,7 @@
-import { Lobby } from "../../models/Lobby.ts";
+import { Lobby } from "../../models/Lobby";
 import mongoose from "mongoose";
-import { generateInviteCode } from "./helpers/generateInviteCode.ts";
-import { isUserInLobby } from "../utils/isUserInLobby.ts";
+import { generateInviteCode } from "./helpers/generateInviteCode";
+import { isUserInLobby } from "../utils/isUserInLobby";
 
 export const createLobby = async (userId: mongoose.Types.ObjectId) => {
   try {

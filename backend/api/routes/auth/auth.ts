@@ -3,8 +3,8 @@ import {
   userLogout,
   authenticateUser,
   getNewAccessToken,
-} from "../../../modules/user/controllers/auth/index.ts";
-import { authenticateJWT } from "../../middleware/authenticateJWT.ts";
+} from "../../../modules/user/controllers/auth/index";
+import { authenticateJWT } from "../../middleware/authenticateJWT";
 
 const router = express.Router();
 

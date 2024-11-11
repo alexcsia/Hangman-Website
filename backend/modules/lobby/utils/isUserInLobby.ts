@@ -1,4 +1,4 @@
-import { Lobby } from "../../models/Lobby.ts";
+import { Lobby } from "../../models/Lobby";
 import mongoose from "mongoose";
 
 export const isUserInLobby = async (userId: mongoose.Types.ObjectId) => {

@@ -5,9 +5,9 @@ import {
   handleMakeGuess,
   handleRematch,
   handleQuit,
-} from "./events/game/index.ts";
-import { handleChatMessage } from "./events/chat/chatMessage.ts";
-import { rateLimit } from "./helpers/chat/rateLimit.ts";
+} from "./events/game/index";
+import { handleChatMessage } from "./events/chat/chatMessage";
+import { rateLimit } from "./helpers/chat/rateLimit";
 
 import { GameState } from "./types";
 

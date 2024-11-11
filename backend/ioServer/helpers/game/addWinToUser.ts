@@ -1,4 +1,4 @@
-import { User } from "../../../modules/models/User.ts";
+import { User } from "../../../modules/models/User";
 
 const addWinToUser = async (playerId: string) => {
   const user = await User.findById(playerId);

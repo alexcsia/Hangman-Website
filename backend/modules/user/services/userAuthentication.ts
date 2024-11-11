@@ -1,8 +1,8 @@
-import { User } from "../../models/User.ts";
-import { comparePasswords } from "../utils/passwordUtils/comparePassword.ts";
-import { signAccessJWT, signRefreshJWT } from "../utils/jwtUtils/index.ts";
-import { getUserByEmail } from "../utils/userQueries/getUserByEmail.ts";
-import { verifyRefreshToken } from "../utils/jwtUtils/index.ts";
+import { User } from "../../models/User";
+import { comparePasswords } from "../utils/passwordUtils/comparePassword";
+import { signAccessJWT, signRefreshJWT } from "../utils/jwtUtils/index";
+import { getUserByEmail } from "../utils/userQueries/getUserByEmail";
+import { verifyRefreshToken } from "../utils/jwtUtils/index";
 
 const loginUser = async (email: string, password: string) => {
   try {

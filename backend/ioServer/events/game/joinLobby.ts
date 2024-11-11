@@ -1,6 +1,6 @@
 import { Server } from "socket.io";
-import { emitGameUpdate } from "./gameUpdate.ts";
-import { lobbies } from "../../types.ts";
+import { emitGameUpdate } from "./gameUpdate";
+import { lobbies } from "../../types";
 
 export const handleJoinLobby = async (
   socket: any,

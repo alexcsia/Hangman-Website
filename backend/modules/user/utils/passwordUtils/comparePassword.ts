@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { IUser } from "../../../models/User.ts";
+import { IUser } from "../../../models/User";
 
 export const comparePasswords = async (
   password: string,

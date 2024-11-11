@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid";
-import { Lobby } from "../../../models/Lobby.ts";
+import { Lobby } from "../../../models/Lobby";
 
 export const generateInviteCode = async (): Promise<string> => {
   const newCode = nanoid(8);

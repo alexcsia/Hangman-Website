@@ -1,4 +1,4 @@
-import { startServer } from "./server.ts";
+import { startServer } from "./server";
 
 startServer().catch((err) => {
   console.error("Error starting server:", err);

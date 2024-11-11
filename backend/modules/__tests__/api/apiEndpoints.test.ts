@@ -1,12 +1,12 @@
 import request from "supertest";
-import { startServer } from "../../../server.ts";
+import { startServer } from "../../../server";
 import http from "http";
-import { User } from "../../models/User.ts";
+import { User } from "../../models/User";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
-import { generateToken } from "../utils/generateJWT.ts";
-import { Lobby } from "../../models/Lobby.ts";
+import { generateToken } from "../utils/generateJWT";
+import { Lobby } from "../../models/Lobby";
 
 let server: http.Server;
 

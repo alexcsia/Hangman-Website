@@ -1,5 +1,5 @@
 import validator from "validator";
-import { getUserByEmail } from "../userQueries/getUserByEmail.ts";
+import { getUserByEmail } from "../userQueries/getUserByEmail";
 
 export const validateEmail = async (email: string): Promise<string> => {
   email = email.trim();

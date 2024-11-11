@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { clearCookie } from "../utils/cookies/clearAuthCookies.ts";
+import { clearCookie } from "../utils/cookies/clearAuthCookies";
 
 /**
  * Controller function to log out a user by clearing their authentication cookies

@@ -1,5 +1,5 @@
-export { handleJoinLobby } from "./joinLobby.ts";
-export { emitGameUpdate } from "./gameUpdate.ts";
-export { handleMakeGuess } from "./makeGuess.ts";
-export { handleRematch } from "./handleRematch.ts";
-export { handleQuit } from "./quitLobby.ts";
+export { handleJoinLobby } from "./joinLobby";
+export { emitGameUpdate } from "./gameUpdate";
+export { handleMakeGuess } from "./makeGuess";
+export { handleRematch } from "./handleRematch";
+export { handleQuit } from "./quitLobby";

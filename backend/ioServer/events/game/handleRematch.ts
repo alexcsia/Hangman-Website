@@ -1,6 +1,6 @@
 import { Server } from "socket.io";
-import { selectRandomWord } from "../../helpers/game/selectRandomWord.ts";
-import { lobbies, rematchCounts } from "../../types.ts";
+import { selectRandomWord } from "../../helpers/game/selectRandomWord";
+import { lobbies, rematchCounts } from "../../types";
 
 export const handleRematch = async (
   socket: any,

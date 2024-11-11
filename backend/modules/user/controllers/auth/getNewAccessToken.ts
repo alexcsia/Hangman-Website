@@ -1,6 +1,6 @@
 import { Response, Request } from "express";
-import userAuthentication from "../../services/userAuthentication.ts";
-import { setAccessTokenCookie } from "../utils/cookies/accessJWTCookie.ts";
+import userAuthentication from "../../services/userAuthentication";
+import { setAccessTokenCookie } from "../utils/cookies/accessJWTCookie";
 
 /**
  * Controller function to refresh a user's access token by using their refresh token

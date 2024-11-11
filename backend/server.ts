@@ -1,10 +1,10 @@
 import express from "express";
 import next from "next";
 import http from "http";
-import { applyRoutes } from "./api/routes/applyRoutes.ts";
-import { setUpMiddleware } from "./middleware/index.ts";
-import connectMongoDB from "./loaders/database.ts";
-import { handleIoEvents } from "./ioServer/ioServer.ts";
+import { applyRoutes } from "./api/routes/applyRoutes";
+import { setUpMiddleware } from "./middleware/index";
+import connectMongoDB from "./loaders/database";
+import { handleIoEvents } from "./ioServer/ioServer";
 
 const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });

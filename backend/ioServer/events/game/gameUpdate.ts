@@ -1,4 +1,4 @@
-import { GameState } from "../../types.ts";
+import { GameState } from "../../types";
 
 export const emitGameUpdate = (
   socket: any,

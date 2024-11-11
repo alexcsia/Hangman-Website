@@ -1,4 +1,4 @@
-import updateLobbyStatus from "../../helpers/game/updateLobbyStatus.ts";
+import updateLobbyStatus from "../../helpers/game/updateLobbyStatus";
 import { Server } from "socket.io";
 
 export const handleQuit = (

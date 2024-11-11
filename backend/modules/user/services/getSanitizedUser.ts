@@ -1,8 +1,8 @@
-import { User } from "../../models/User.ts";
+import { User } from "../../models/User";
 import mongoose from "mongoose";
-import { escapeUsername } from "../utils/validators/validateUsername.ts";
+import { escapeUsername } from "../utils/validators/validateUsername";
 
-export const getUser = async (userId: string) => {
+export const getSanitizedUser = async (userId: string) => {
   if (!mongoose.Types.ObjectId.isValid(userId)) {
     throw new Error("Invalid user ID");
   }

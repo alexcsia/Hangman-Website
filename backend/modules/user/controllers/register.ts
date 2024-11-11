@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import userRegistration from "../services/userRegistration.ts";
+import userRegistration from "../services/userRegistration";
 
 /**
  * Controller function to register a new user

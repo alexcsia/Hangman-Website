@@ -1,6 +1,6 @@
 import { Response, Request } from "express";
-import userAuthentication from "../../services/userAuthentication.ts";
-import { setAuthCookies } from "../utils/cookies/setAuthCookies.ts";
+import userAuthentication from "../../services/userAuthentication";
+import { setAuthCookies } from "../utils/cookies/setAuthCookies";
 
 /**
  * Controller function to authenticate a user with their email and password.

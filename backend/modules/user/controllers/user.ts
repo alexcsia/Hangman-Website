@@ -1,6 +1,6 @@
 import { Response } from "express";
-import { IAuthenticatedRequest } from "../../types/IAuthenticatedRequest.ts";
-import { getUser } from "../services/getUser.ts";
+import { IAuthenticatedRequest } from "../../types/IAuthenticatedRequest";
+import { getSanitizedUser } from "../services/getSanitizedUser";
 
 /**
  * Controller function to retrieve a user's profile
@@ -29,7 +29,7 @@ export const getUserProfile = async (
   }
 
   try {
-    const userData = await getUser(userIdFromParams);
+    const userData = await getSanitizedUser(userIdFromParams);
     return res.status(200).json(userData);
   } catch (error) {
     if (error instanceof Error) {

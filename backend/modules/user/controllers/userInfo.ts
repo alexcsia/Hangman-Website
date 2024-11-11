@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IAuthenticatedRequest } from "../../types/IAuthenticatedRequest.ts";
+import { IAuthenticatedRequest } from "../../types/IAuthenticatedRequest";
 
 /**
  * Controller function to retrieve the authenticated user's basic information
