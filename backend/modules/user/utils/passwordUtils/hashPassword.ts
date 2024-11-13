@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import { ApiError } from "../../../../errors/ApiError";
 
 export const hashPassword = async (password: string) => {
   try {
@@ -6,8 +7,7 @@ export const hashPassword = async (password: string) => {
     return hashedPassword;
   } catch (error) {
     if (error instanceof Error) {
-      console.error("Error hashing password:", error.message);
-      throw new Error("Failed to hash password");
+      throw new ApiError(500, "Failed to hash password");
     }
   }
 };

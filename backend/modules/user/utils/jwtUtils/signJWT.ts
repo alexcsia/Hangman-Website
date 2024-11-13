@@ -1,5 +1,6 @@
 import { IUser } from "../../../models/User";
 import jwt from "jsonwebtoken";
+import { ApiError } from "../../../../errors/ApiError";
 
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -23,7 +24,7 @@ export const signAccessJWT = (user: IUser): string => {
     );
     return accessToken;
   } catch (error) {
-    throw new Error("Failed to sign access token");
+    throw new ApiError(500, "Failed to sign access token");
   }
 };
 
@@ -36,6 +37,6 @@ export const signRefreshJWT = (user: IUser): string => {
     );
     return refreshToken;
   } catch (error) {
-    throw new Error("Failed to sign refresh token");
+    throw new ApiError(500, "Failed to sign refresh token");
   }
 };

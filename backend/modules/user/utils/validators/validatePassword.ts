@@ -1,4 +1,5 @@
 import validator from "validator";
+import { ApiError } from "../../../../errors/ApiError";
 
 export const validatePassword = (password: string): string => {
   if (
@@ -10,10 +11,10 @@ export const validatePassword = (password: string): string => {
       minSymbols: 1,
     })
   ) {
-    throw new Error("Password not strong enough");
+    throw new ApiError(400, "Password not strong enough");
   }
   if (!validator.isLength(password, { min: 10, max: 64 })) {
-    throw new Error("Password cannot exceed 64 characters");
+    throw new ApiError(400, "Password cannot exceed 64 characters");
   }
 
   return password;
