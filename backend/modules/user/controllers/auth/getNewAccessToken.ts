@@ -1,6 +1,7 @@
 import { Response, Request } from "express";
 import userAuthentication from "../../services/userAuthentication";
 import { setAccessTokenCookie } from "../utils/cookies/accessJWTCookie";
+import { ApiError } from "../../../../errors/ApiError";
 
 /**
  * Controller function to refresh a user's access token by using their refresh token
@@ -18,24 +19,26 @@ import { setAccessTokenCookie } from "../utils/cookies/accessJWTCookie";
 export const getNewAccessToken = async (req: Request, res: Response) => {
   try {
     const refreshToken = req.cookies.refreshToken;
-    if (!refreshToken) return res.sendStatus(401);
+    if (!refreshToken) throw new ApiError(401, "Refresh token is missing");
 
     const newAccessToken = await userAuthentication.generateAccessToken(
       refreshToken
     );
-    if (newAccessToken) {
-      setAccessTokenCookie(res, newAccessToken);
-    }
+    if (!newAccessToken)
+      throw new ApiError(403, "Failed to generate new access token");
+
+    setAccessTokenCookie(res, newAccessToken);
 
     return res
       .status(200)
       .json({ message: "Access token refreshed successfully" });
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error("Error generating new access token:", error.message);
-      return res.status(403).json({
-        message: "Failed to generate access token",
-      });
+    if (error instanceof ApiError) {
+      console.error(error.message);
+      return res.status(error.status).json({ message: error.message });
     }
+
+    console.error("Error generating new access token:", error);
+    throw new ApiError(500, "Internal server error");
   }
 };

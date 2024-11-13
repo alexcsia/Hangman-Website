@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { clearCookie } from "../utils/cookies/clearAuthCookies";
+import { ApiError } from "../../../../errors/ApiError";
 
 /**
  * Controller function to log out a user by clearing their authentication cookies
@@ -22,9 +23,9 @@ export const userLogout = async (req: Request, res: Response) => {
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error("Error logging out:", error.message);
-      return res.status(500).json({
-        message: "Internal server error",
-      });
+      throw new ApiError(500, "Internal server error");
     }
+
+    throw new ApiError(500, "Internal server error");
   }
 };
