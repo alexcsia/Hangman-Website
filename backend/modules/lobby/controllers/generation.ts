@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { createLobby } from "../services/createLobby";
 import { IAuthenticatedRequest } from "../../types/IAuthenticatedRequest";
-import mongoose from "mongoose";
+import { convertToObjectId } from "../utils/convertToObjectId";
 
 /**
  * Controller function to generate a new game lobby and provide a redirect URL
@@ -11,11 +11,10 @@ import mongoose from "mongoose";
  * error message is returned. Upon successful lobby creation, a JSON response with a redirect URL containing the
  * lobby ID and a unique code is sent, redirecting the user to the newly created game lobby
  *
- * @param req - The incoming request object containing the authenticated user's ID in `req.user`
+ * @param req - The incoming request object containing the authenticated user's ID in req.user
  * @param res - The response object used to send the redirect URL or an error message
  * @returns A JSON response containing the redirect URL or an error message if something goes wrong
  */
-
 export const generateCodeAndLobby = async (
   req: IAuthenticatedRequest,
   res: Response
@@ -23,7 +22,12 @@ export const generateCodeAndLobby = async (
   try {
     const userIdFromToken = req.user?.id;
 
-    const userIdObject = new mongoose.Types.ObjectId(userIdFromToken);
+    if (!userIdFromToken) {
+      return res.status(400).json({ message: "User ID is required." });
+    }
+
+    const userIdObject = convertToObjectId(userIdFromToken);
+
     const lobby = await createLobby(userIdObject);
     if (!lobby) {
       throw new Error("Could not create the lobby");
