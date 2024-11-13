@@ -19,8 +19,8 @@ describe("websocket chat", () => {
 
     httpServer.listen(() => {
       const { port } = httpServer.address() as { port: number };
-      client1 = io(`http://localhost:${port}`);
-      client2 = io(`http://localhost:${port}`);
+      client1 = io(`ws://localhost:${port}`);
+      client2 = io(`ws://localhost:${port}`);
 
       client1.on("connect", done);
     });
