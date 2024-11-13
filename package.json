@@ -8,7 +8,7 @@
     "build": "tsc && tsc-alias && next build",
     "start": "dotenv -e .env.production -- node dist/backend/startServer.js",
     "lint": "eslint --ext .ts,.tsx app backend",
-    "test": "cross-env NODE_ENV=test dotenv -e .env.test jest --config jest.config.js"
+    "test": "cross-env NODE_ENV=test dotenv -e .env.development jest --config jest.config.js"
   },
   "dependencies": {
     "@types/validator": "^13.12.2",

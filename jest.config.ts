@@ -11,11 +11,16 @@ const config: Config = {
         useESM: true,
       },
     ],
+    "^.+\\.(js|jsx)$": "babel-jest",
   },
+  transformIgnorePatterns: ["/node_modules/(?!nanoid)"],
   extensionsToTreatAsEsm: [".ts"],
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   verbose: true,
   testPathIgnorePatterns: ["/node_modules/", "/__tests__/utils/"],
+  moduleNameMapper: {
+    "^(\\.{1,2}/.*)\\.js$": "$1",
+  },
 };
 
 export default config;

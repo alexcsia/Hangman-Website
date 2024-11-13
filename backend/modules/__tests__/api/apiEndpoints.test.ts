@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import { generateToken } from "../utils/generateJWT";
 import { Lobby } from "../../models/Lobby";
+// TODO: fix nanoid import issue
 
 let server: http.Server;
 
@@ -103,6 +104,47 @@ describe("API tests", () => {
       });
       expect(response.status).toBe(200);
       expect(foundLobby).toBeTruthy;
+    });
+  });
+
+  describe("Lobby join test", () => {
+    it("should allow a user to join an existing lobby", async () => {
+      const hashedPassword = await bcrypt.hash("123!PASSword", 10);
+      const user = await User.create({
+        username: "testusername",
+        email: "test@example.com",
+        password: hashedPassword,
+      });
+      const token = generateToken(user);
+
+      const lobbyResponse = await request(server)
+        .get("/api/play/generate")
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(lobbyResponse.status).toBe(200);
+      const { code: lobbyCode, _id: lobbyId } = lobbyResponse.body;
+
+      const joinLobbyResponse = await request(server)
+        .post("/api/play/join")
+        .set("Authorization", `Bearer ${token}`)
+        .send({ lobbyCode });
+
+      expect(joinLobbyResponse.status).toBe(200);
+      expect(joinLobbyResponse.body).toHaveProperty("redirectUrl");
+
+      const updatedLobby = await Lobby.findById(lobbyId).populate("players");
+
+      const players = updatedLobby?.players as
+        | mongoose.Types.ObjectId[]
+        | undefined;
+
+      if (players) {
+        const userId = user._id as mongoose.Types.ObjectId;
+
+        expect(players.some((player) => player.equals(userId))).toBe(true);
+      } else {
+        throw new Error("Players not populated correctly");
+      }
     });
   });
 });
