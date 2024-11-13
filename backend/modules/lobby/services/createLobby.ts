@@ -2,11 +2,14 @@ import { Lobby } from "../../models/Lobby";
 import mongoose from "mongoose";
 import { generateInviteCode } from "./helpers/generateInviteCode";
 import { isUserInLobby } from "../utils/isUserInLobby";
+import { ApiError } from "../../../errors/ApiError";
 
 export const createLobby = async (userId: mongoose.Types.ObjectId) => {
   try {
     const userInOtherLobby = await isUserInLobby(userId);
-    if (userInOtherLobby) throw new Error("User is already part of a lobby");
+    if (userInOtherLobby) {
+      throw new ApiError(400, "User is already part of a lobby");
+    }
 
     const inviteCode = await generateInviteCode();
 
@@ -18,8 +21,13 @@ export const createLobby = async (userId: mongoose.Types.ObjectId) => {
 
     return lobby;
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      throw new Error(error.message);
+    if (error instanceof ApiError) {
+      throw error;
     }
+
+    throw new ApiError(
+      500,
+      error instanceof Error ? error.message : "Could not create the lobby"
+    );
   }
 };
