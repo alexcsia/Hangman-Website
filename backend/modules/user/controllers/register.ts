@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import userRegistration from "../services/userRegistration";
+import { ApiError } from "../../../errors/ApiError";
 
 /**
  * Controller function to register a new user
@@ -21,9 +22,13 @@ export const registerUser = async (req: Request, res: Response) => {
     await userRegistration.addUser(username, email, password);
     return res.status(201).json("User registered successfully");
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error("Error registering user:", error.message);
-      return res.status(500).json({ message: error.message });
+    if (error instanceof ApiError) {
+      return res.status(error.status).json({ message: error.message });
     }
+
+    throw new ApiError(
+      500,
+      error instanceof Error ? error.message : "User registration failed"
+    );
   }
 };

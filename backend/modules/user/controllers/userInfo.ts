@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { IAuthenticatedRequest } from "../../types/IAuthenticatedRequest";
+import { ApiError } from "../../../errors/ApiError";
 
 /**
  * Controller function to retrieve the authenticated user's basic information
@@ -20,7 +21,7 @@ export const getUserInfo = async (
   const user = req.user;
 
   if (!user) {
-    return res.status(401).json({ message: "Unauthorized" });
+    throw new ApiError(401, "Unauthorized");
   }
 
   try {
@@ -29,7 +30,7 @@ export const getUserInfo = async (
       username: user.username,
       email: user.email,
     });
-  } catch (error) {
-    return res.status(500).json({ message: "Internal Server error" });
+  } catch (error: unknown) {
+    throw new ApiError(500, "Internal Server error");
   }
 };
