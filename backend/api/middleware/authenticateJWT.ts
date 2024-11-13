@@ -3,7 +3,8 @@ import { Request, Response, NextFunction } from "express";
 import isJwtPayloadWithUserData from "../../modules/user/utils/jwtUtils/isJWTPayload";
 import { IAuthenticatedRequest } from "../../modules/types/IAuthenticatedRequest";
 
-const JWT_SECRET = process.env.JWT_SECRET || "secret_key";
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) throw new Error("JWT_SECRET not defined");
 
 export const authenticateJWT = (
   req: IAuthenticatedRequest,
