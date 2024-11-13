@@ -2,8 +2,7 @@ import { Request, Response } from "express";
 import { searchForLobby } from "./helpers/searchForLobby";
 import { IAuthenticatedRequest } from "../../types/IAuthenticatedRequest";
 import { addPlayerToLobby } from "../services/addPlayerToLobby";
-import mongoose from "mongoose";
-
+import { convertToObjectId } from "../utils/convertToObjectId";
 /**
  * Controller function to allow a user to join an existing game lobby
  *
@@ -27,8 +26,11 @@ export const joinLobby = async (req: IAuthenticatedRequest, res: Response) => {
 
     const userIdFromToken = req.user?.id;
 
-    const userIdObject = new mongoose.Types.ObjectId(userIdFromToken);
-    const lobbyIdObject = new mongoose.Types.ObjectId(lobby.id);
+    if (!userIdFromToken) {
+      return res.status(400).json({ message: "User ID is required." });
+    }
+    const userIdObject = convertToObjectId(userIdFromToken);
+    const lobbyIdObject = convertToObjectId(lobby.id);
 
     await addPlayerToLobby(lobbyIdObject, userIdObject);
 
