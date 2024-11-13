@@ -66,7 +66,7 @@ describe("generateAccessToken function", () => {
   it("should throw an error if refresh token is invalid", async () => {
     await expect(
       userService.generateAccessToken("invalidToken")
-    ).rejects.toThrow("jwt malformed");
+    ).rejects.toThrow("Invalid or expired refresh token");
   });
 
   it("should throw an error if refresh token is valid but user does not exist", async () => {

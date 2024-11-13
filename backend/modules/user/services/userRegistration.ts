@@ -5,6 +5,7 @@ import {
   validateEmail,
   validatePassword,
 } from "../utils/validators/index";
+import { ApiError } from "../../../errors/ApiError";
 
 const addUser = async (username: string, email: string, password: string) => {
   const validatedUsername = validateUsername(username);
@@ -23,7 +24,7 @@ const addUser = async (username: string, email: string, password: string) => {
     await newUser.save();
   } catch (error: unknown) {
     if (error instanceof Error) {
-      throw new Error(error.message || "Could not save user");
+      throw new ApiError(500, error.message || "Could not save user");
     }
   }
 };

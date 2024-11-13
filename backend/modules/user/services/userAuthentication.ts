@@ -3,25 +3,29 @@ import { comparePasswords } from "../utils/passwordUtils/comparePassword";
 import { signAccessJWT, signRefreshJWT } from "../utils/jwtUtils/index";
 import { getUserByEmail } from "../utils/userQueries/getUserByEmail";
 import { verifyRefreshToken } from "../utils/jwtUtils/index";
+import { ApiError } from "../../../errors/ApiError";
 
 const loginUser = async (email: string, password: string) => {
   try {
     const user = await getUserByEmail(email);
-    if (!user) throw new Error("Invalid email or password");
+    if (!user) {
+      throw new ApiError(401, "Invalid email or password");
+    }
 
     await comparePasswords(password, user);
 
     const accessToken = signAccessJWT(user);
     const refreshToken = signRefreshJWT(user);
     if (!accessToken || !refreshToken) {
-      throw new Error("Failed to generate tokens");
+      throw new ApiError(500, "Failed to generate tokens");
     }
 
     return { accessToken, refreshToken };
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      throw new Error(error.message);
+    if (error instanceof ApiError) {
+      throw error;
     }
+    throw new ApiError(500, "An error occurred during login");
   }
 };
 
@@ -31,13 +35,16 @@ const generateAccessToken = async (refreshToken: string) => {
     const userId = verifiedToken.id;
 
     const user = await User.findById(userId);
-    if (!user) throw new Error("Could not find user");
+    if (!user) {
+      throw new ApiError(404, "Could not find user");
+    }
 
     return signAccessJWT(user);
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      throw new Error(error.message);
+    if (error instanceof ApiError) {
+      throw error;
     }
+    throw new ApiError(500, "An error occurred during token generation");
   }
 };
 
