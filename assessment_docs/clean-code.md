@@ -2,12 +2,14 @@
 
 ## Single responsibility principle
 
-### Examples:
+### Some examples:
 
 - any controller: controllers delegate work to the services and are only responsible for receiving requests and sending responses.
   ex: https://github.com/alexcsia/Hangman-Website/blob/main/backend/modules/user/controllers/register.ts
 - websocket events: each event is responsible for only one task
   ex: https://github.com/alexcsia/Hangman-Website/blob/main/backend/ioServer/events/chat/chatMessage.ts
+- functions
+  ex: https://github.com/alexcsia/Hangman-Website/blob/main/backend/modules/user/utils/passwordUtils/hashPassword.ts
 
 ## DRY:
 
@@ -28,6 +30,8 @@
 ## Use of docstrings:
 
 - all API is documented via docstrings
+  ex: https://github.com/alexcsia/Hangman-Website/blob/main/backend/modules/user/controllers/register.ts
+  https://github.com/alexcsia/Hangman-Website/blob/main/backend/modules/lobby/controllers/join.ts
 
 ## Principle of least astonishment:
 
@@ -46,8 +50,3 @@
   authenticateUser
 - consistent naming convention:
   camelcase
-
---
-
-1. MAKE GAME EVENTS SRP
-2. RENAME GETUSER TO GET SANITIZED USER
