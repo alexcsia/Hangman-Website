@@ -3,6 +3,8 @@ import { searchForLobby } from "./helpers/searchForLobby";
 import { IAuthenticatedRequest } from "../../types/IAuthenticatedRequest";
 import { addPlayerToLobby } from "../services/addPlayerToLobby";
 import { convertToObjectId } from "../utils/convertToObjectId";
+import { ApiError } from "../../../errors/ApiError";
+
 /**
  * Controller function to allow a user to join an existing game lobby
  *
@@ -21,14 +23,15 @@ export const joinLobby = async (req: IAuthenticatedRequest, res: Response) => {
     const data = req.body;
     const lobby = await searchForLobby(data.lobbyCode);
     if (!lobby) {
-      throw new Error("Game not found");
+      throw new ApiError(404, "Game not found");
     }
 
     const userIdFromToken = req.user?.id;
 
     if (!userIdFromToken) {
-      return res.status(400).json({ message: "User ID is required." });
+      throw new ApiError(400, "User ID is required.");
     }
+
     const userIdObject = convertToObjectId(userIdFromToken);
     const lobbyIdObject = convertToObjectId(lobby.id);
 
@@ -36,9 +39,16 @@ export const joinLobby = async (req: IAuthenticatedRequest, res: Response) => {
 
     return res.json({ redirectUrl: `/play/${lobby._id}?code=${lobby.code}` });
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error("Error when trying to join lobby:", error.message);
-      return res.status(500).json({ message: error.message });
+    if (error instanceof ApiError) {
+      return res.status(error.status).json({ message: error.message });
     }
+
+    console.error(
+      "Error when trying to join lobby:",
+      error instanceof Error ? error.message : "Unknown error"
+    );
+    return res
+      .status(500)
+      .json({ message: "Something went wrong. Please try again later." });
   }
 };

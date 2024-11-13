@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { createLobby } from "../services/createLobby";
 import { IAuthenticatedRequest } from "../../types/IAuthenticatedRequest";
 import { convertToObjectId } from "../utils/convertToObjectId";
+import { ApiError } from "../../../errors/ApiError";
 
 /**
  * Controller function to generate a new game lobby and provide a redirect URL
@@ -23,23 +24,25 @@ export const generateCodeAndLobby = async (
     const userIdFromToken = req.user?.id;
 
     if (!userIdFromToken) {
-      return res.status(400).json({ message: "User ID is required." });
+      throw new ApiError(400, "User ID is required.");
     }
 
     const userIdObject = convertToObjectId(userIdFromToken);
 
     const lobby = await createLobby(userIdObject);
     if (!lobby) {
-      throw new Error("Could not create the lobby");
+      throw new ApiError(500, "Could not create the lobby");
     }
 
     return res.json({ redirectUrl: `/play/${lobby._id}?code=${lobby.code}` });
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.log("Error creating lobby:", error.message);
-      return res
-        .status(500)
-        .json({ message: "Something went wrong... Please try again" });
+    if (error instanceof ApiError) {
+      return res.status(error.status).json({ message: error.message });
     }
+
+    console.log("Error creating lobby:", error);
+    return res
+      .status(500)
+      .json({ message: "Something went wrong... Please try again" });
   }
 };
