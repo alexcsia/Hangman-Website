@@ -28,6 +28,7 @@
   ex: https://github.com/alexcsia/Hangman-Website/blob/main/backend/modules/lobby/controllers/helpers/searchForLobby.ts
 - pure functions
   ex: https://github.com/alexcsia/Hangman-Website/blob/main/backend/modules/user/utils/validators/validatePassword.ts
+  https://github.com/alexcsia/Hangman-Website/blob/main/backend/ioServer/helpers/game/makeGuesshelpers/checkWinCondition.ts
 
 ## Use of docstrings:
 
@@ -35,16 +36,13 @@
   ex: https://github.com/alexcsia/Hangman-Website/blob/main/backend/modules/user/controllers/register.ts
   https://github.com/alexcsia/Hangman-Website/blob/main/backend/modules/lobby/controllers/join.ts
 
-## Principle of least astonishment:
+## Principle of least astonishment and good identifier names:
 
 ### Examples:
 
 - functions do exactly what their name says:
   ex: https://github.com/alexcsia/Hangman-Website/blob/main/backend/modules/user/services/getSanitizedUser.ts
-
-## Good identifier names:
-
-### Examples:
+  https://github.com/alexcsia/Hangman-Website/blob/main/backend/ioServer/helpers/game/selectRandomWord.ts
 
 - use Intention-Revealing Variable Names:
   hashedPassword, validatedUsername, validatedEmail, etc
@@ -52,6 +50,7 @@
 
 - use Intention-Revealing Function names:
   https://github.com/alexcsia/Hangman-Website/blob/main/backend/modules/lobby/services/helpers/addLobbyToDb.ts
+  https://github.com/alexcsia/Hangman-Website/blob/main/backend/ioServer/helpers/game/addWinToUser.ts
 
 - consistent naming convention:
-  camelcase
+  camelCase
