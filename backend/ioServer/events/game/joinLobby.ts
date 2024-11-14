@@ -8,30 +8,33 @@ export const handleJoinLobby = async (
   playerId: string,
   io: Server
 ) => {
-  addSocketToLobby(socket, lobbyId, playerId);
-  initializeLobby(lobbyId);
-
-  if (!lobbies[lobbyId].players[playerId]) {
-    lobbies[lobbyId].players[playerId] = {
-      guessedLetters: [],
-      remainingAttempts: 6,
-    };
-  }
+  joinLobby(socket, lobbyId, playerId);
+  addSocketToLobby(lobbyId);
+  initializePlayer(lobbyId, playerId);
 
   emitGameUpdate(socket, lobbyId, playerId, lobbies);
 };
 
-const addSocketToLobby = (socket: any, lobbyId: string, playerId: string) => {
+const joinLobby = (socket: any, lobbyId: string, playerId: string) => {
   socket.join(lobbyId);
   console.log(`Player ${playerId} joined lobby: ${lobbyId}`);
 };
 
-const initializeLobby = (lobbyId: string) => {
+const addSocketToLobby = (lobbyId: string) => {
   if (!lobbies[lobbyId]) {
     const randomWord = "example";
     lobbies[lobbyId] = {
       word: randomWord,
       players: {},
+    };
+  }
+};
+
+const initializePlayer = (lobbyId: string, playerId: string) => {
+  if (!lobbies[lobbyId].players[playerId]) {
+    lobbies[lobbyId].players[playerId] = {
+      guessedLetters: [],
+      remainingAttempts: 6,
     };
   }
 };
