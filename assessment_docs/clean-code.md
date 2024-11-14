@@ -1,6 +1,6 @@
 # This is a list of clean code principles that were followed so far in this project
 
-# Each principle has at least one example
+# Each principle has at least one example, but there are other examples as well
 
 ## Single responsibility principle
 
@@ -47,8 +47,11 @@
 ### Examples:
 
 - use Intention-Revealing Variable Names:
-  hashedPassword
+  hashedPassword, validatedUsername, validatedEmail, etc
+  ex: https://github.com/alexcsia/Hangman-Website/blob/main/backend/modules/user/services/userRegistration.ts
+
 - use Intention-Revealing Function names:
-  authenticateUser
+  https://github.com/alexcsia/Hangman-Website/blob/main/backend/modules/lobby/services/helpers/addLobbyToDb.ts
+
 - consistent naming convention:
   camelcase
