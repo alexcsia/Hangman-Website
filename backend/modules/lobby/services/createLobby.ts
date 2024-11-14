@@ -1,8 +1,8 @@
-import { Lobby } from "../../models/Lobby";
-import mongoose from "mongoose";
 import { generateInviteCode } from "./helpers/generateInviteCode";
 import { isUserInLobby } from "../utils/isUserInLobby";
 import { ApiError } from "../../../errors/ApiError";
+import { createNewLobby } from "./helpers/addLobbyToDb";
+import mongoose from "mongoose";
 
 export const createLobby = async (userId: mongoose.Types.ObjectId) => {
   try {
@@ -12,14 +12,7 @@ export const createLobby = async (userId: mongoose.Types.ObjectId) => {
     }
 
     const inviteCode = await generateInviteCode();
-
-    const lobby = await Lobby.create({
-      players: [userId],
-      status: "ongoing",
-      code: inviteCode,
-    });
-
-    return lobby;
+    return await createNewLobby(userId, inviteCode);
   } catch (error: unknown) {
     if (error instanceof ApiError) {
       throw error;
