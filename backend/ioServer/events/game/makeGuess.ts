@@ -3,16 +3,6 @@ import { emitGameUpdate } from "./gameUpdate";
 import addWinToUser from "../../helpers/game/addWinToUser";
 import { lobbies } from "../../types";
 
-const makeGuess = (playerState: any, lobby: any, letter: string) => {
-  if (!playerState.guessedLetters.includes(letter)) {
-    playerState.guessedLetters.push(letter);
-
-    if (!lobby.word.includes(letter)) {
-      playerState.remainingAttempts--;
-    }
-  }
-};
-
 export const handleMakeGuess = (
   socket: any,
   lobbyId: string,
@@ -29,9 +19,7 @@ export const handleMakeGuess = (
 
     emitGameUpdate(socket, lobbyId, playerId, lobbies);
 
-    const isGameWon = lobby.word
-      .split("")
-      .every((letter) => playerState.guessedLetters.includes(letter));
+    const isGameWon = checkWinCondition(lobby.word, playerState.guessedLetters);
 
     if (isGameWon) {
       io.to(lobbyId).emit("gameOver", `${username} won!`);
@@ -41,6 +29,20 @@ export const handleMakeGuess = (
 
     if (playerState.remainingAttempts <= 0) {
       io.to(lobbyId).emit("gameOver", `${username} is out of tries!`);
+    }
+  }
+};
+
+const checkWinCondition = (word: string, guessedLetters: string[]): boolean => {
+  return word.split("").every((letter) => guessedLetters.includes(letter));
+};
+
+const makeGuess = (playerState: any, lobby: any, letter: string) => {
+  if (!playerState.guessedLetters.includes(letter)) {
+    playerState.guessedLetters.push(letter);
+
+    if (!lobby.word.includes(letter)) {
+      playerState.remainingAttempts--;
     }
   }
 };
