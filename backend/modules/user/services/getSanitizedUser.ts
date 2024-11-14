@@ -3,10 +3,14 @@ import mongoose from "mongoose";
 import { escapeUsername } from "../utils/validators/validateUsername";
 import { ApiError } from "../../../errors/ApiError";
 
-export const getSanitizedUser = async (userId: string) => {
+const validateUserId = (userId: string) => {
   if (!mongoose.Types.ObjectId.isValid(userId)) {
     throw new ApiError(400, "Invalid user ID");
   }
+};
+
+export const getSanitizedUser = async (userId: string) => {
+  validateUserId(userId);
 
   try {
     const userData = await User.findOne({ _id: userId }).select(

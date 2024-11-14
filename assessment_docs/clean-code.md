@@ -1,5 +1,7 @@
 # This is a list of clean code principles that were followed so far in this project
 
+# Each principle has at least one example
+
 ## Single responsibility principle
 
 ### Some examples:
@@ -38,7 +40,7 @@
 ### Examples:
 
 - functions do exactly what their name says:
-  ex: getSanitizedUser
+  ex: https://github.com/alexcsia/Hangman-Website/blob/main/backend/modules/user/services/getSanitizedUser.ts
 
 ## Good identifier names:
 
