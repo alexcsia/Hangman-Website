@@ -22,19 +22,14 @@ export const handleMakeGuess = (
     const isGameWon = checkWinCondition(lobby.word, playerState.guessedLetters);
 
     if (isGameWon) {
-      io.to(lobbyId).emit("gameOver", `${username} won!`);
-      addWinToUser(playerId).catch(console.log);
+      handleGameOver(io, lobbyId, `${username} won!`, playerId);
       return;
     }
 
     if (playerState.remainingAttempts <= 0) {
-      io.to(lobbyId).emit("gameOver", `${username} is out of tries!`);
+      handleGameOver(io, lobbyId, `${username} is out of tries!`);
     }
   }
-};
-
-const checkWinCondition = (word: string, guessedLetters: string[]): boolean => {
-  return word.split("").every((letter) => guessedLetters.includes(letter));
 };
 
 const makeGuess = (playerState: any, lobby: any, letter: string) => {
@@ -44,5 +39,21 @@ const makeGuess = (playerState: any, lobby: any, letter: string) => {
     if (!lobby.word.includes(letter)) {
       playerState.remainingAttempts--;
     }
+  }
+};
+
+const checkWinCondition = (word: string, guessedLetters: string[]): boolean => {
+  return word.split("").every((letter) => guessedLetters.includes(letter));
+};
+
+const handleGameOver = (
+  io: Server,
+  lobbyId: string,
+  message: string,
+  playerId?: string
+) => {
+  io.to(lobbyId).emit("gameOver", message);
+  if (playerId) {
+    addWinToUser(playerId).catch(console.log);
   }
 };
