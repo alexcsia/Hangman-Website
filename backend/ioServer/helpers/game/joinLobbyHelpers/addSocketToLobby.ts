@@ -1,8 +1,9 @@
 import { lobbies } from "../../../types";
+import { selectRandomWord } from "../selectRandomWord";
 
-export const addSocketToLobby = (lobbyId: string) => {
+export const addSocketToLobby = async (lobbyId: string) => {
   if (!lobbies[lobbyId]) {
-    const randomWord = "example";
+    const randomWord = (await selectRandomWord()) || "example";
     lobbies[lobbyId] = {
       word: randomWord,
       players: {},
