@@ -13,7 +13,7 @@ export const handleJoinLobby = async (
   console.log(`Player ${playerId} joined lobby: ${lobbyId}`);
 
   if (!lobbies[lobbyId]) {
-    const randomWord = selectRandomWord() || "example";
+    const randomWord = (await selectRandomWord()) || "word";
     lobbies[lobbyId] = {
       word: randomWord,
       players: {},
