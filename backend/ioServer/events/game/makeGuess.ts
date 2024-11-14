@@ -3,6 +3,16 @@ import { emitGameUpdate } from "./gameUpdate";
 import addWinToUser from "../../helpers/game/addWinToUser";
 import { lobbies } from "../../types";
 
+const makeGuess = (playerState: any, lobby: any, letter: string) => {
+  if (!playerState.guessedLetters.includes(letter)) {
+    playerState.guessedLetters.push(letter);
+
+    if (!lobby.word.includes(letter)) {
+      playerState.remainingAttempts--;
+    }
+  }
+};
+
 export const handleMakeGuess = (
   socket: any,
   lobbyId: string,
@@ -15,13 +25,7 @@ export const handleMakeGuess = (
   const playerState = lobby?.players[playerId];
 
   if (lobby && playerState && playerState.remainingAttempts > 0) {
-    if (!playerState.guessedLetters.includes(letter)) {
-      playerState.guessedLetters.push(letter);
-
-      if (!lobby.word.includes(letter)) {
-        playerState.remainingAttempts--;
-      }
-    }
+    makeGuess(playerState, lobby, letter);
 
     emitGameUpdate(socket, lobbyId, playerId, lobbies);
 
