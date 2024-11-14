@@ -1,6 +1,6 @@
 # This is a list of clean code principles that were followed so far in this project
 
-# Each principle has at least one example, but there are other examples as well
+## Each principle has at least one example, but there are other examples as well
 
 ## Single responsibility principle
 
@@ -27,14 +27,17 @@
 - functions that do one thing and do it well
   ex: https://github.com/alexcsia/Hangman-Website/blob/main/backend/modules/lobby/controllers/helpers/searchForLobby.ts
 - pure functions
-  ex: https://github.com/alexcsia/Hangman-Website/blob/main/backend/modules/user/utils/validators/validatePassword.ts
-  https://github.com/alexcsia/Hangman-Website/blob/main/backend/ioServer/helpers/game/makeGuesshelpers/checkWinCondition.ts
+  ex: https://github.com/alexcsia/Hangman-Website/blob/main/backend/ioServer/helpers/game/makeGuesshelpers/checkWinCondition.ts
 
-## Use of docstrings:
+## Use of docstrings for documentation:
 
 - all API is documented via docstrings
   ex: https://github.com/alexcsia/Hangman-Website/blob/main/backend/modules/user/controllers/register.ts
   https://github.com/alexcsia/Hangman-Website/blob/main/backend/modules/lobby/controllers/join.ts
+
+## Class with only one resposanbility, used for consistent error handling:
+
+ex: https://github.com/alexcsia/Hangman-Website/blob/main/backend/errors/ApiError.ts
 
 ## Principle of least astonishment and good identifier names:
 
@@ -49,8 +52,10 @@
   ex: https://github.com/alexcsia/Hangman-Website/blob/main/backend/modules/user/services/userRegistration.ts
 
 - use Intention-Revealing Function names:
-  https://github.com/alexcsia/Hangman-Website/blob/main/backend/modules/lobby/services/helpers/addLobbyToDb.ts
+  https://github.com/alexcsia/Hangman-Website/blob/main/backend/modules/lobby/services/createLobby.ts
   https://github.com/alexcsia/Hangman-Website/blob/main/backend/ioServer/helpers/game/addWinToUser.ts
 
 - consistent naming convention:
   camelCase
+
+Additionally, there is no dead code, magic numbers/strings and no ambiguous abbreviations being used.
