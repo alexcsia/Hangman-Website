@@ -1,6 +1,7 @@
 import { Server } from "socket.io";
 import { emitGameUpdate } from "./gameUpdate";
 import { lobbies } from "../../types";
+import { selectRandomWord } from "../../helpers/game/selectRandomWord";
 
 export const handleJoinLobby = async (
   socket: any,
@@ -12,7 +13,7 @@ export const handleJoinLobby = async (
   console.log(`Player ${playerId} joined lobby: ${lobbyId}`);
 
   if (!lobbies[lobbyId]) {
-    const randomWord = "example";
+    const randomWord = selectRandomWord() || "example";
     lobbies[lobbyId] = {
       word: randomWord,
       players: {},
