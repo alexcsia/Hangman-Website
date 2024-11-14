@@ -2,7 +2,7 @@ import { Server } from "socket.io";
 import { emitGameUpdate } from "./gameUpdate";
 import { lobbies } from "../../types";
 import { joinLobby } from "../../helpers/game/joinLobbyHelpers/joinLobby";
-import { addSocketToLobby } from "../../helpers/game/joinLobbyHelpers/addSocketToLobby";
+import { initializeLobby } from "../../helpers/game/joinLobbyHelpers/initializeLobby";
 import { initializePlayer } from "../../helpers/game/joinLobbyHelpers/initializePlayer";
 
 export const handleJoinLobby = async (
@@ -12,7 +12,7 @@ export const handleJoinLobby = async (
   io: Server
 ) => {
   joinLobby(socket, lobbyId, playerId);
-  addSocketToLobby(lobbyId);
+  initializeLobby(lobbyId);
   initializePlayer(lobbyId, playerId);
 
   emitGameUpdate(socket, lobbyId, playerId, lobbies);
