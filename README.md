@@ -109,14 +109,4 @@ The application interacts with the database through models created with the help
 
 Errors are handled such in a way that prevents the exposure of sensitive information
 
-# Clean code
-
-## Single responsability principle
-
-- Each controller only handles its specific logic (e.g. register.ts https://github.com/alexcsia/Hangman-Website/blob/main/backend/modules/user/controllers/register.ts)
-
--
-
-## DRY
-
-- Shared functions are abstracted into utility files
+## Threat Model, Cloud Diagram and Clean Code Principles can be found in the assessment_docs folder
