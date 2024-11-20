@@ -1,7 +1,7 @@
 import { generateInviteCode } from "./helpers/generateInviteCode";
 import { isUserInLobby } from "../utils/isUserInLobby";
 import { ApiError } from "../../../errors/ApiError";
-import { createNewLobby } from "./helpers/addLobbyToDb";
+import { createNewLobby } from "./helpers/createNewLobby";
 import mongoose from "mongoose";
 
 export const createLobby = async (userId: mongoose.Types.ObjectId) => {
