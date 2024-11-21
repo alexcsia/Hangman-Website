@@ -3,6 +3,7 @@ import { signAccessJWT, signRefreshJWT } from "../utils/jwtUtils/index";
 import { verifyRefreshToken } from "../utils/jwtUtils/index";
 import { ApiError } from "../../../errors/ApiError";
 import { validateUserCredentials } from "../utils/validators/index";
+import { getUserFromToken } from "../utils/jwtUtils/index";
 
 const loginUser = async (email: string, password: string) => {
   try {
@@ -21,21 +22,6 @@ const loginUser = async (email: string, password: string) => {
     }
     throw new ApiError(500, "An error occurred during login");
   }
-};
-interface jwtToken {
-  id: string;
-  email?: string;
-  iat?: number;
-  exp?: number;
-}
-export const getUserFromToken = async (token: jwtToken) => {
-  const userId = token.id;
-
-  const user = await User.findById(userId);
-  if (!user) {
-    throw new ApiError(404, "Could not find user");
-  }
-  return user;
 };
 
 const generateAccessToken = async (refreshToken: string) => {
