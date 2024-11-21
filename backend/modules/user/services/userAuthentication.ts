@@ -1,19 +1,12 @@
 import { User } from "../../models/User";
-import { comparePasswords } from "../utils/passwordUtils/comparePassword";
 import { signAccessJWT, signRefreshJWT } from "../utils/jwtUtils/index";
-import { getUserByEmail } from "../utils/userQueries/getUserByEmail";
 import { verifyRefreshToken } from "../utils/jwtUtils/index";
 import { ApiError } from "../../../errors/ApiError";
+import { validateUserCredentials } from "../utils/validators/validateUserCredentials";
 
 const loginUser = async (email: string, password: string) => {
   try {
-    const user = await getUserByEmail(email);
-    if (!user) {
-      throw new ApiError(401, "Invalid email or password");
-    }
-
-    await comparePasswords(password, user);
-
+    const user = await validateUserCredentials(email, password);
     const accessToken = signAccessJWT(user);
     const refreshToken = signRefreshJWT(user);
     if (!accessToken || !refreshToken) {
